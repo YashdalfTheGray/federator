@@ -2,8 +2,14 @@ package main
 
 import (
 	"flag"
+	"fmt"
 	"os"
 )
+
+func informAndExit(message string, code int) {
+	fmt.Println(message)
+	os.Exit(code)
+}
 
 func main() {
 	var roleArn string
