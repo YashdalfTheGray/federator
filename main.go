@@ -29,8 +29,14 @@ func main() {
 	switch os.Args[1] {
 	case "link":
 		fmt.Println("Using AWS STS to get a federated console signin link...")
+		linkCmd.Parse(os.Args[2:])
+		break
 	case "creds":
 		fmt.Println("Using AWS STS to get temporary credentials")
+		credsCmd.Parse(os.Args[2:])
+		break
+	case "-h", "--help":
+		fmt.Println("\nUsage: federator <subcommand> <options>")
 	default:
 		informAndExit(fmt.Sprintf("Invalid subcommand, %s. Valid options are link, creds", os.Args[1]), 1)
 	}
