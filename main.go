@@ -25,4 +25,13 @@ func main() {
 	if len(os.Args) < 2 {
 		informAndExit("This executable needs a subcommand and options to work. Use -h for help.", 1)
 	}
+
+	switch os.Args[1] {
+	case "link":
+		fmt.Println("Using AWS STS to get a federated console signin link...")
+	case "creds":
+		fmt.Println("Using AWS STS to get temporary credentials")
+	default:
+		informAndExit(fmt.Sprintf("Invalid subcommand, %s. Valid options are link, creds", os.Args[1]), 1)
+	}
 }
