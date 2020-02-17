@@ -30,10 +30,16 @@ func main() {
 	case "link":
 		fmt.Println("Using AWS STS to get a federated console signin link...")
 		linkCmd.Parse(os.Args[2:])
+		if roleArn == "" {
+			informAndExit("the --role-arn flag is required for this subcommand", 1)
+		}
 		break
 	case "creds":
 		fmt.Println("Using AWS STS to get temporary credentials")
 		credsCmd.Parse(os.Args[2:])
+		if roleArn == "" {
+			informAndExit("the --role-arn flag is required for this subcommand", 1)
+		}
 		break
 	case "-h", "--help":
 		fmt.Println("\nUsage: federator <subcommand> <options>")
