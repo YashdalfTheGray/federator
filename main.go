@@ -87,11 +87,21 @@ func main() {
 		}
 		break
 	case "creds":
-		fmt.Println("Using AWS STS to get temporary credentials")
+		fmt.Println("Using AWS STS to get temporary credentials...")
+		fmt.Print("\n")
 		credsCmd.Parse(os.Args[2:])
+
 		if roleArn == "" {
 			informAndExit("the --role-arn flag is required for this subcommand", 1)
 		}
+
+		creds, credsErr := authWithSTS(roleArn)
+		if credsErr != nil {
+			informAndExit(credsErr.Error(), 1)
+		}
+
+		printCredsFromOutput(creds)
+		os.Exit(0)
 		break
 	case "-h", "--help":
 		fmt.Println("\nUsage: federator <subcommand> <options>")
