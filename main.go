@@ -1,14 +1,34 @@
 package main
 
 import (
+	"errors"
 	"flag"
 	"fmt"
 	"os"
+	"regexp"
+
+	"github.com/aws/aws-sdk-go/aws/session"
 )
 
 func informAndExit(message string, code int) {
 	fmt.Println(message)
 	os.Exit(code)
+}
+
+func getAWSSession(options session.Options) *session.Session {
+	return session.Must(session.NewSessionWithOptions(options))
+}
+
+func getSessionName(roleArn string) (string, error) {
+	user, _ := os.LookupEnv("USER")
+	roleRegex := regexp.MustCompile("arn:aws:iam::[0-9]{12}:role/([a-zA-Z0-9-]+)")
+	match := roleRegex.FindAllStringSubmatch(roleArn, -1)
+
+	if !roleRegex.MatchString(roleArn) {
+		return "", errors.New("Invalid Role ARN")
+	}
+
+	return fmt.Sprintf("federator-%s-%s", user, match[0][1]), nil
 }
 
 func main() {
