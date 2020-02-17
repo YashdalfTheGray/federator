@@ -11,6 +11,10 @@ import (
 	"github.com/aws/aws-sdk-go/service/sts"
 )
 
+const envAWSAccessKeyID = "AWS_ACCESS_KEY_ID"
+const envAWSSecretAccessKey = "AWS_SECRET_ACCESS_KEY"
+const envAWSSessionToken = "AWS_SESSION_TOKEN"
+
 func informAndExit(message string, code int) {
 	fmt.Println(message)
 	os.Exit(code)
@@ -51,6 +55,14 @@ func authWithSTS(roleArn string) (*sts.AssumeRoleOutput, error) {
 	}
 
 	return stsClient.AssumeRole(serviceAssumeRoleInput)
+}
+
+func printCredsFromOutput(out *sts.AssumeRoleOutput) {
+	fmt.Println("Successfully authenticated with STS. Commands to use below.")
+	fmt.Println(fmt.Sprintf("This session will expire at %s", out.Credentials.Expiration.Local().String()))
+	fmt.Println(fmt.Sprintf("export %s=%s", envAWSAccessKeyID, *out.Credentials.AccessKeyId))
+	fmt.Println(fmt.Sprintf("export %s=%s", envAWSSecretAccessKey, *out.Credentials.SecretAccessKey))
+	fmt.Println(fmt.Sprintf("export %s=%s", envAWSSessionToken, *out.Credentials.SessionToken))
 }
 
 func main() {
