@@ -8,6 +8,7 @@ import (
 	"regexp"
 
 	"github.com/aws/aws-sdk-go/aws/session"
+	"github.com/aws/aws-sdk-go/service/sts"
 )
 
 func informAndExit(message string, code int) {
@@ -29,6 +30,27 @@ func getSessionName(roleArn string) (string, error) {
 	}
 
 	return fmt.Sprintf("federator-%s-%s", user, match[0][1]), nil
+}
+
+// GetDevAuth returns the credentials for an authenticated session using AWS STS
+func authWithSTS(roleArn string) (*sts.AssumeRoleOutput, error) {
+	sesh := getAWSSession(session.Options{
+		SharedConfigState: session.SharedConfigEnable,
+	})
+
+	roleSessionName, roleSessionNameErr := getSessionName(roleArn)
+	if roleSessionNameErr != nil {
+		informAndExit(roleSessionNameErr.Error(), 1)
+	}
+
+	stsClient := sts.New(sesh)
+
+	serviceAssumeRoleInput := &sts.AssumeRoleInput{
+		RoleArn:         &roleArn,
+		RoleSessionName: &roleSessionName,
+	}
+
+	return stsClient.AssumeRole(serviceAssumeRoleInput)
 }
 
 func main() {
