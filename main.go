@@ -127,6 +127,9 @@ func main() {
 		if credsErr != nil {
 			informAndExit(credsErr.Error(), 1)
 		}
+
+		signinTokenURL := getSigninTokenURL(creds)
+		fmt.Println(signinTokenURL.String())
 		break
 	case "creds":
 		fmt.Println("Using AWS STS to get temporary credentials...")
