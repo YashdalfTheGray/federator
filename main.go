@@ -7,6 +7,8 @@ import (
 	"os"
 	"regexp"
 
+	"encoding/json"
+
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/sts"
 )
@@ -55,6 +57,25 @@ func authWithSTS(roleArn string) (*sts.AssumeRoleOutput, error) {
 	}
 
 	return stsClient.AssumeRole(serviceAssumeRoleInput)
+}
+
+func getSessionString(creds *sts.AssumeRoleOutput) string {
+	session := struct {
+		SessionID    string `json:"sessionId"`
+		SessionKey   string `json:"sessionKey"`
+		SessionToken string `json:"sessionToken"`
+	}{
+		SessionID:    *creds.Credentials.AccessKeyId,
+		SessionKey:   *creds.Credentials.SecretAccessKey,
+		SessionToken: *creds.Credentials.SessionToken,
+	}
+
+	sessionStr, err := json.Marshal(session)
+	if err != nil {
+		informAndExit(err.Error(), 1)
+	}
+
+	return string(sessionStr)
 }
 
 func printCredsFromOutput(out *sts.AssumeRoleOutput) {
