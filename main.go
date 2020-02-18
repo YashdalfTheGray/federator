@@ -85,6 +85,11 @@ func main() {
 		if roleArn == "" {
 			informAndExit("the --role-arn flag is required for this subcommand", 1)
 		}
+
+		creds, credsErr := authWithSTS(roleArn)
+		if credsErr != nil {
+			informAndExit(credsErr.Error(), 1)
+		}
 		break
 	case "creds":
 		fmt.Println("Using AWS STS to get temporary credentials...")
