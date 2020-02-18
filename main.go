@@ -1,13 +1,13 @@
 package main
 
 import (
+	"encoding/json"
 	"errors"
 	"flag"
 	"fmt"
+	"net/url"
 	"os"
 	"regexp"
-
-	"encoding/json"
 
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/sts"
@@ -16,6 +16,7 @@ import (
 const envAWSAccessKeyID = "AWS_ACCESS_KEY_ID"
 const envAWSSecretAccessKey = "AWS_SECRET_ACCESS_KEY"
 const envAWSSessionToken = "AWS_SESSION_TOKEN"
+const federationEndpoint = "https://signin.aws.amazon.com/federation"
 
 func informAndExit(message string, code int) {
 	fmt.Println(message)
@@ -76,6 +77,21 @@ func getSessionString(creds *sts.AssumeRoleOutput) string {
 	}
 
 	return string(sessionStr)
+}
+
+func getSigninTokenURL(creds *sts.AssumeRoleOutput) url.URL {
+	u, err := url.Parse(federationEndpoint)
+	if err != nil {
+		informAndExit(err.Error(), 1)
+	}
+
+	q := u.Query()
+	q.Set("Action", "getSigninToken")
+	q.Set("SessionDuration", "3600")
+	q.Set("Session", getSessionString(creds))
+
+	u.RawQuery = q.Encode()
+	return *u
 }
 
 func printCredsFromOutput(out *sts.AssumeRoleOutput) {
