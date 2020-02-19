@@ -21,6 +21,8 @@ const envAWSAccessKeyID = "AWS_ACCESS_KEY_ID"
 const envAWSSecretAccessKey = "AWS_SECRET_ACCESS_KEY"
 const envAWSSessionToken = "AWS_SESSION_TOKEN"
 const federationEndpoint = "https://signin.aws.amazon.com/federation"
+const defaultIssuer = "https://aws.amazon.com"
+const defaultDestination = "https://console.aws.amazon.com/console/home"
 
 func getAWSSession(options session.Options) *session.Session {
 	return session.Must(session.NewSessionWithOptions(options))
@@ -120,6 +122,22 @@ func getSigninToken(signinURL url.URL) string {
 	return signinResponse.SigninToken
 }
 
+func getLoginURL(signinToken string) url.URL {
+	u, err := url.Parse(federationEndpoint)
+	if err != nil {
+		log.Fatalln(err.Error())
+	}
+
+	q := u.Query()
+	q.Set("Action", "login")
+	q.Set("Issuer", defaultIssuer)
+	q.Set("Destination", defaultDestination)
+	q.Set("SigninToken", signinToken)
+
+	u.RawQuery = q.Encode()
+	return *u
+}
+
 func printCredsFromOutput(out *sts.AssumeRoleOutput) {
 	fmt.Println("Successfully authenticated with STS. Commands to use below.")
 	fmt.Println(fmt.Sprintf("This session will expire at %s", out.Credentials.Expiration.Local().String()))
@@ -155,7 +173,9 @@ func main() {
 		}
 
 		signinTokenURL := getSigninTokenURL(creds)
-		fmt.Println(getSigninToken(signinTokenURL))
+		signinToken := getSigninToken(signinTokenURL)
+		loginURL := getLoginURL(signinToken)
+		fmt.Println(loginURL.String())
 		break
 	case "creds":
 		fmt.Println("Using AWS STS to get temporary credentials...")
