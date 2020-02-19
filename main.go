@@ -5,6 +5,7 @@ import (
 	"errors"
 	"flag"
 	"fmt"
+	"log"
 	"net/url"
 	"os"
 	"regexp"
@@ -17,11 +18,6 @@ const envAWSAccessKeyID = "AWS_ACCESS_KEY_ID"
 const envAWSSecretAccessKey = "AWS_SECRET_ACCESS_KEY"
 const envAWSSessionToken = "AWS_SESSION_TOKEN"
 const federationEndpoint = "https://signin.aws.amazon.com/federation"
-
-func informAndExit(message string, code int) {
-	fmt.Println(message)
-	os.Exit(code)
-}
 
 func getAWSSession(options session.Options) *session.Session {
 	return session.Must(session.NewSessionWithOptions(options))
@@ -47,7 +43,7 @@ func authWithSTS(roleArn string) (*sts.AssumeRoleOutput, error) {
 
 	roleSessionName, roleSessionNameErr := getSessionName(roleArn)
 	if roleSessionNameErr != nil {
-		informAndExit(roleSessionNameErr.Error(), 1)
+		log.Fatalln(roleSessionNameErr.Error())
 	}
 
 	stsClient := sts.New(sesh)
@@ -73,7 +69,7 @@ func getSessionString(creds *sts.AssumeRoleOutput) string {
 
 	sessionStr, err := json.Marshal(session)
 	if err != nil {
-		informAndExit(err.Error(), 1)
+		log.Fatalln(err.Error())
 	}
 
 	return string(sessionStr)
@@ -82,7 +78,7 @@ func getSessionString(creds *sts.AssumeRoleOutput) string {
 func getSigninTokenURL(creds *sts.AssumeRoleOutput) url.URL {
 	u, err := url.Parse(federationEndpoint)
 	if err != nil {
-		informAndExit(err.Error(), 1)
+		log.Fatalln(err.Error())
 	}
 
 	q := u.Query()
@@ -112,7 +108,7 @@ func main() {
 	credsCmd.StringVar(&roleArn, "role-arn", "", "the role arn to assume for federating with AWS")
 
 	if len(os.Args) < 2 {
-		informAndExit("This executable needs a subcommand and options to work. Use -h for help.", 1)
+		log.Fatalln("This executable needs a subcommand and options to work. Use -h for help.")
 	}
 
 	switch os.Args[1] {
@@ -120,12 +116,12 @@ func main() {
 		fmt.Println("Using AWS STS to get a federated console signin link...")
 		linkCmd.Parse(os.Args[2:])
 		if roleArn == "" {
-			informAndExit("the --role-arn flag is required for this subcommand", 1)
+			log.Fatalln("the --role-arn flag is required for this subcommand")
 		}
 
 		creds, credsErr := authWithSTS(roleArn)
 		if credsErr != nil {
-			informAndExit(credsErr.Error(), 1)
+			log.Fatalln(credsErr.Error())
 		}
 
 		signinTokenURL := getSigninTokenURL(creds)
@@ -137,12 +133,12 @@ func main() {
 		credsCmd.Parse(os.Args[2:])
 
 		if roleArn == "" {
-			informAndExit("the --role-arn flag is required for this subcommand", 1)
+			log.Fatalln("the --role-arn flag is required for this subcommand")
 		}
 
 		creds, credsErr := authWithSTS(roleArn)
 		if credsErr != nil {
-			informAndExit(credsErr.Error(), 1)
+			log.Fatalln(credsErr.Error())
 		}
 
 		printCredsFromOutput(creds)
@@ -160,6 +156,6 @@ func main() {
 		os.Exit(0)
 		break
 	default:
-		informAndExit(fmt.Sprintf("Invalid subcommand, %s. Valid options are link, creds", os.Args[1]), 1)
+		log.Fatalln(fmt.Sprintf("Invalid subcommand, %s. Valid options are link, creds", os.Args[1]))
 	}
 }
