@@ -146,6 +146,12 @@ func printCredsFromOutput(out *sts.AssumeRoleOutput) {
 	fmt.Println(fmt.Sprintf("export %s=%s", envAWSSessionToken, *out.Credentials.SessionToken))
 }
 
+func printLoginURLDetails(out *sts.AssumeRoleOutput, loginURL string) {
+	fmt.Println("Successfully authenticated with STS. Login URL below.")
+	fmt.Println(fmt.Sprintf("This session will expire at %s", out.Credentials.Expiration.Local().String()))
+	fmt.Println(loginURL)
+}
+
 func main() {
 	var roleArn string
 
@@ -175,7 +181,9 @@ func main() {
 		signinTokenURL := getSigninTokenURL(creds)
 		signinToken := getSigninToken(signinTokenURL)
 		loginURL := getLoginURL(signinToken)
-		fmt.Println(loginURL.String())
+
+		printLoginURLDetails(creds, loginURL.String())
+		os.Exit(0)
 		break
 	case "creds":
 		fmt.Println("Using AWS STS to get temporary credentials...")
