@@ -5,10 +5,13 @@ import (
 	"errors"
 	"flag"
 	"fmt"
+	"io/ioutil"
 	"log"
+	"net/http"
 	"net/url"
 	"os"
 	"regexp"
+	"time"
 
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/sts"
@@ -90,6 +93,33 @@ func getSigninTokenURL(creds *sts.AssumeRoleOutput) url.URL {
 	return *u
 }
 
+func getSigninToken(signinURL url.URL) string {
+	var signinResponse struct {
+		SigninToken string `json:"SigninToken"`
+	}
+	client := &http.Client{
+		Timeout: time.Second * 10,
+	}
+
+	resp, signinReqErr := client.Get(signinURL.String())
+	if signinReqErr != nil {
+		log.Fatalln(signinReqErr.Error())
+	}
+	defer resp.Body.Close()
+
+	body, readBodyErr := ioutil.ReadAll(resp.Body)
+	if readBodyErr != nil {
+		log.Fatalln(readBodyErr.Error())
+	}
+
+	unmarshalErr := json.Unmarshal(body, &signinResponse)
+	if unmarshalErr != nil {
+		log.Fatalln(unmarshalErr.Error())
+	}
+
+	return signinResponse.SigninToken
+}
+
 func printCredsFromOutput(out *sts.AssumeRoleOutput) {
 	fmt.Println("Successfully authenticated with STS. Commands to use below.")
 	fmt.Println(fmt.Sprintf("This session will expire at %s", out.Credentials.Expiration.Local().String()))
@@ -125,7 +155,7 @@ func main() {
 		}
 
 		signinTokenURL := getSigninTokenURL(creds)
-		fmt.Println(signinTokenURL.String())
+		fmt.Println(getSigninToken(signinTokenURL))
 		break
 	case "creds":
 		fmt.Println("Using AWS STS to get temporary credentials...")
