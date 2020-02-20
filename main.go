@@ -2,7 +2,6 @@ package main
 
 import (
 	"encoding/json"
-	"errors"
 	"flag"
 	"fmt"
 	"io/ioutil"
@@ -10,11 +9,11 @@ import (
 	"net/http"
 	"net/url"
 	"os"
-	"regexp"
 	"time"
 
-	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/sts"
+
+	"github.com/YashdalfTheGray/federator/utils"
 )
 
 const envAWSAccessKeyID = "AWS_ACCESS_KEY_ID"
@@ -23,43 +22,6 @@ const envAWSSessionToken = "AWS_SESSION_TOKEN"
 const federationEndpoint = "https://signin.aws.amazon.com/federation"
 const defaultIssuer = "https://aws.amazon.com"
 const defaultDestination = "https://console.aws.amazon.com/console/home"
-
-func getAWSSession(options session.Options) *session.Session {
-	return session.Must(session.NewSessionWithOptions(options))
-}
-
-func getSessionName(roleArn string) (string, error) {
-	user, _ := os.LookupEnv("USER")
-	roleRegex := regexp.MustCompile("arn:aws:iam::[0-9]{12}:role/([a-zA-Z0-9-]+)")
-	match := roleRegex.FindAllStringSubmatch(roleArn, -1)
-
-	if !roleRegex.MatchString(roleArn) {
-		return "", errors.New("Invalid Role ARN")
-	}
-
-	return fmt.Sprintf("federator-%s-%s", user, match[0][1]), nil
-}
-
-// GetDevAuth returns the credentials for an authenticated session using AWS STS
-func authWithSTS(roleArn string) (*sts.AssumeRoleOutput, error) {
-	sesh := getAWSSession(session.Options{
-		SharedConfigState: session.SharedConfigEnable,
-	})
-
-	roleSessionName, roleSessionNameErr := getSessionName(roleArn)
-	if roleSessionNameErr != nil {
-		log.Fatalln(roleSessionNameErr.Error())
-	}
-
-	stsClient := sts.New(sesh)
-
-	serviceAssumeRoleInput := &sts.AssumeRoleInput{
-		RoleArn:         &roleArn,
-		RoleSessionName: &roleSessionName,
-	}
-
-	return stsClient.AssumeRole(serviceAssumeRoleInput)
-}
 
 func getSessionString(creds *sts.AssumeRoleOutput) string {
 	session := struct {
@@ -173,7 +135,7 @@ func main() {
 			log.Fatalln("the --role-arn flag is required for this subcommand")
 		}
 
-		creds, credsErr := authWithSTS(roleArn)
+		creds, credsErr := utils.AuthWithSTS(roleArn)
 		if credsErr != nil {
 			log.Fatalln(credsErr.Error())
 		}
@@ -194,7 +156,7 @@ func main() {
 			log.Fatalln("the --role-arn flag is required for this subcommand")
 		}
 
-		creds, credsErr := authWithSTS(roleArn)
+		creds, credsErr := utils.AuthWithSTS(roleArn)
 		if credsErr != nil {
 			log.Fatalln(credsErr.Error())
 		}
