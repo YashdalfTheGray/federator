@@ -2,6 +2,7 @@ package utils
 
 import (
 	"fmt"
+	"os"
 
 	"github.com/aws/aws-sdk-go/service/sts"
 
@@ -13,6 +14,12 @@ import (
 // as well as the expiration information about the session
 func PrintCredsFromSTSOutput(out *sts.AssumeRoleOutput) {
 	fmt.Println("Successfully authenticated with STS. Commands to use below.")
+
+	if os.Getenv("CI_MODE") == "true" {
+		fmt.Println("<Running in quiet mode because of CI>")
+		return
+	}
+
 	fmt.Println(fmt.Sprintf("This session will expire at %s", out.Credentials.Expiration.Local().String()))
 	fmt.Println(fmt.Sprintf("export %s=%s", constants.EnvAWSAccessKeyID, *out.Credentials.AccessKeyId))
 	fmt.Println(fmt.Sprintf("export %s=%s", constants.EnvAWSSecretAccessKey, *out.Credentials.SecretAccessKey))
@@ -23,6 +30,12 @@ func PrintCredsFromSTSOutput(out *sts.AssumeRoleOutput) {
 // of the session
 func PrintLoginURLDetails(out *sts.AssumeRoleOutput, loginURL string) {
 	fmt.Println("Successfully authenticated with STS. Login URL below.")
+
+	if os.Getenv("CI_MODE") == "true" {
+		fmt.Println("<Running in quiet mode because of CI>")
+		return
+	}
+
 	fmt.Println(fmt.Sprintf("This session will expire at %s", out.Credentials.Expiration.Local().String()))
 	fmt.Println(loginURL)
 }
