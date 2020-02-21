@@ -53,7 +53,7 @@ func GetSigninTokenURL(creds *sts.AssumeRoleOutput) url.URL {
 
 // GetSigninToken uses the signin URL and calls it to get the user a signin
 // token
-func GetSigninToken(signinURL url.URL) string {
+func GetSigninToken(signinURL url.URL) (string, error) {
 	var signinResponse struct {
 		SigninToken string `json:"SigninToken"`
 	}
@@ -63,21 +63,21 @@ func GetSigninToken(signinURL url.URL) string {
 
 	resp, signinReqErr := client.Get(signinURL.String())
 	if signinReqErr != nil {
-		log.Fatalln(signinReqErr.Error())
+		return "", signinReqErr
 	}
 	defer resp.Body.Close()
 
 	body, readBodyErr := ioutil.ReadAll(resp.Body)
 	if readBodyErr != nil {
-		log.Fatalln(readBodyErr.Error())
+		return "", readBodyErr
 	}
 
 	unmarshalErr := json.Unmarshal(body, &signinResponse)
 	if unmarshalErr != nil {
-		log.Fatalln(unmarshalErr.Error())
+		return "", unmarshalErr
 	}
 
-	return signinResponse.SigninToken
+	return signinResponse.SigninToken, nil
 }
 
 // GetLoginURL builds the console login URL after all of the federation is

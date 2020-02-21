@@ -38,7 +38,10 @@ func main() {
 		}
 
 		signinTokenURL := utils.GetSigninTokenURL(creds)
-		signinToken := utils.GetSigninToken(signinTokenURL)
+		signinToken, signinErr := utils.GetSigninToken(signinTokenURL)
+		if signinErr != nil {
+			log.Fatalln(signinErr.Error())
+		}
 		loginURL := utils.GetLoginURL(signinToken)
 
 		utils.PrintLoginURLDetails(creds, loginURL.String())
