@@ -33,3 +33,11 @@ jobs:
 
       - name: Build and test with Make
         run: make
+
+      - name: Run "integration tests"
+        run: |
+          ./bin/federator link --role-arn ${{ secrets.ASSUME_ROLE_ARN }}
+          ./bin/federator creds --role-arn ${{ secrets.ASSUME_ROLE_ARN }}
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
