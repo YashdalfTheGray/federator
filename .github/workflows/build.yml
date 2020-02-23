@@ -42,3 +42,14 @@ jobs:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           CI_MODE: true
+
+      - name: Store artifacts
+        uses: ncipollo/release-action@v1
+        with:
+          allowUpdates: true
+          artifacts: "bin/federator"
+          body: ${{ join("Built from", github.sha) }}
+          commit: ${{ github.sha }}
+          draft: true
+          name: ${{ github.sha }}
+          token: ${{ secrets.GITHUB_TOKEN }}
