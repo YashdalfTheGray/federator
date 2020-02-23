@@ -6,7 +6,7 @@ A utility to federate into an AWS account using AWS Security Token Service and t
 
 ## Using the tool
 
-Instructions to come later on running the tool.
+The federator tool has two modes, `link` and `creds`. These take the form of subcommands. The `link` subcommand gives you a link to sign into the AWS Console and the `creds` subcommand just gives you temporary credentials with the right commands to import it into a shell instance. The only argument required for both subcommands is `--role-arn` which is the ARN of the role to assume.
 
 ## Development
 
