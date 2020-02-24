@@ -48,8 +48,9 @@ jobs:
         with:
           allowUpdates: true
           artifacts: "bin/federator"
-          body: join("Built from", ${{ github.sha }})
+          body: format("Built from {0} on {1}", ${{ github.sha }}, ${{ runner.os }})
           commit: ${{ github.sha }}
           draft: true
           name: ${{ github.sha }}
+          tag: ${{ github.sha }}
           token: ${{ secrets.GITHUB_TOKEN }}
