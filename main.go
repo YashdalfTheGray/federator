@@ -6,17 +6,40 @@ import (
 	"log"
 	"os"
 
+	"github.com/YashdalfTheGray/federator/constants"
 	"github.com/YashdalfTheGray/federator/utils"
 )
 
 func main() {
-	var roleArn string
+	var roleArn, issuerURL, destinationURL string
 
 	linkCmd := flag.NewFlagSet("link", flag.ExitOnError)
-	linkCmd.StringVar(&roleArn, "role-arn", "", "the role arn to assume for federating with AWS")
+	linkCmd.StringVar(
+		&roleArn,
+		"role-arn",
+		"",
+		"the role arn to assume for federating with AWS",
+	)
+	linkCmd.StringVar(
+		&issuerURL,
+		"issuer",
+		constants.DefaultIssuer,
+		"the link where the user will be taken when the session has expired",
+	)
+	linkCmd.StringVar(
+		&destinationURL,
+		"destination",
+		constants.DefaultDestination,
+		"the link that the user will be redirected to after login",
+	)
 
 	credsCmd := flag.NewFlagSet("creds", flag.ExitOnError)
-	credsCmd.StringVar(&roleArn, "role-arn", "", "the role arn to assume for federating with AWS")
+	credsCmd.StringVar(
+		&roleArn,
+		"role-arn",
+		"",
+		"the role arn to assume for federating with AWS",
+	)
 
 	if len(os.Args) < 2 {
 		log.Fatalln("This executable needs a subcommand and options to work. Use -h for help.")
@@ -42,7 +65,7 @@ func main() {
 		if signinErr != nil {
 			log.Fatalln(signinErr.Error())
 		}
-		loginURL := utils.GetLoginURL(signinToken)
+		loginURL := utils.GetLoginURL(signinToken, issuerURL, destinationURL)
 
 		utils.PrintLoginURLDetails(creds, loginURL.String())
 		os.Exit(0)
