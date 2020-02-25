@@ -82,7 +82,7 @@ func GetSigninToken(signinURL url.URL) (string, error) {
 
 // GetLoginURL builds the console login URL after all of the federation is
 // done and returns the URL object
-func GetLoginURL(signinToken string) url.URL {
+func GetLoginURL(signinToken, issuerURL, destinationURL string) url.URL {
 	u, err := url.Parse(constants.FederationEndpoint)
 	if err != nil {
 		log.Fatalln(err.Error())
@@ -90,8 +90,8 @@ func GetLoginURL(signinToken string) url.URL {
 
 	q := u.Query()
 	q.Set("Action", "login")
-	q.Set("Issuer", constants.DefaultIssuer)
-	q.Set("Destination", constants.DefaultDestination)
+	q.Set("Issuer", issuerURL)
+	q.Set("Destination", destinationURL)
 	q.Set("SigninToken", signinToken)
 
 	u.RawQuery = q.Encode()
