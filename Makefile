@@ -6,7 +6,9 @@ GOFILES := $(shell go list -f '{{ join .GoFiles "\n" }}' ./...)
 
 build: .bin-stamp
 	go build -o bin/federator
-	chmod +x bin/federator
+
+ci-build: .bin-stamp
+	go build -o bin/$(output_dir)/federator
 
 test:
 	go test -covermode=atomic -coverpkg=all ./...
