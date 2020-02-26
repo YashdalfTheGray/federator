@@ -32,7 +32,7 @@ jobs:
           fi
 
       - name: Build and test with Make
-        run: /
+        run: |
           make ci-build output_dir="${{ runner.os }}"
           make coverage
 
