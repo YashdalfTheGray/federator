@@ -26,17 +26,16 @@ jobs:
       - name: Get dependencies
         run: |
           go get -v -t -d ./...
-          go get github.com/ory/go-acc
 
       - name: Build and test with Make
         run: |
           make ci-build output_dir="${{ runner.os }}"
-          make coverage
+          make test
 
       - name: Run "integration tests"
         run: |
-          ./bin/federator link --role-arn ${{ secrets.ASSUME_ROLE_ARN }}
-          ./bin/federator creds --role-arn ${{ secrets.ASSUME_ROLE_ARN }}
+          ./bin/${{ runner.os }}/federator link --role-arn ${{ secrets.ASSUME_ROLE_ARN }}
+          ./bin/${{ runner.os }}/federator creds --role-arn ${{ secrets.ASSUME_ROLE_ARN }}
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
@@ -47,9 +46,9 @@ jobs:
         with:
           allowUpdates: false
           artifacts: ${{ format('bin/{0}/federator', runner.os) }}
-          body: ${{ format('Built from {0} on {1}', github.sha, runner.os) }}
+          body: ${{ format('Built from {0}', github.sha) }}
           commit: ${{ github.sha }}
           draft: true
-          name: ${{ format('Latest CI build - {0}', runner.os) }}
+          name: Latest CI Build
           tag: ${{ github.sha }}
           token: ${{ secrets.GITHUB_TOKEN }}
