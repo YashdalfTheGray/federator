@@ -8,7 +8,7 @@ build: .bin-stamp
 	go build -o bin/federator
 
 ci-build: .bin-stamp
-	go build -o bin/$(output_dir)/federator
+	go build -o bin/federator-$(platform)
 
 test:
 	go test -covermode=atomic -coverpkg=all ./...
