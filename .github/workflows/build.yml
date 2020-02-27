@@ -44,7 +44,7 @@ jobs:
       - name: Store artifacts
         uses: ncipollo/release-action@v1
         with:
-          allowUpdates: false
+          allowUpdates: true
           artifacts: ${{ format('bin/federator-{0}', runner.os) }}
           body: ${{ format('Built from {0}', github.sha) }}
           commit: ${{ github.sha }}
