@@ -4,7 +4,13 @@
 
 A utility to federate into an AWS account using AWS Security Token Service and then get a link to go directly into the console.
 
-## Using the tool
+## Usage
+
+### Installation
+
+The best way to "install" this tool is to pull down the repository and run `make`. This will put a file called `federator` in the `bin` folder in the root of the project directory.
+
+## Running
 
 The federator tool has two modes, `link` and `creds`. These take the form of subcommands. The `link` subcommand gives you a link to sign into the AWS Console and the `creds` subcommand just gives you temporary credentials with the right commands to import it into a shell instance.
 
