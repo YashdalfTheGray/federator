@@ -8,7 +8,9 @@ A utility to federate into an AWS account using AWS Security Token Service and t
 
 ### Installation
 
-The best way to "install" this tool is to pull down the repository and run `make`. This will put a file called `federator` in the `bin` folder in the root of the project directory.
+The easiest way to install this tool is to grab the built binary from the releases, put it somewhere that is in your path, run a quick `chmod +x <path_to_federator>` and you'll be good to go.
+
+The other way to get this tool is to pull down the repository and run `make`. This will put a file called `federator` in the `bin` folder in the root of the project directory.
 
 ## Running
 
@@ -37,3 +39,7 @@ Once the code is cloned, you're going to need to run a preliminary `make build` 
 The one requirement for running this tool is having installed and fully configured AWS CLI. Being able to run `aws sts get-caller-identity` successfully wil tell you that it is installed and configured properly.
 
 The executable in `bin` has the right permissions, so running `./bin/federator` will let you run it in development.
+
+### Contributing
+
+Contributions to this project are welcome and encouraged. This project uses the standard golang tooling, `go-fmt`, and go modules. There is a `make` target for tests and one for generating coverage. Make sure to run these commands before creating a pull request.
