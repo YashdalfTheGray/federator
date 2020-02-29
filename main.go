@@ -100,8 +100,7 @@ func main() {
 		os.Exit(0)
 		break
 	case "-v", "--version":
-		fmt.Println(fmt.Sprintf("\nfederator %s", constants.Version))
-		fmt.Println("Use `federator -h` or `federator --help` to display help text.")
+		fmt.Println(fmt.Sprintf("v%s", constants.Version))
 	default:
 		log.Fatalln(fmt.Sprintf("Invalid subcommand, %s. Valid options are link, creds", os.Args[1]))
 	}
