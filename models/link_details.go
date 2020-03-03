@@ -8,3 +8,12 @@ type LinkDetails struct {
 	ExpiresAfter *time.Time `json:"expiresAfter"`
 	LoginURL     string     `json:"loginUrl"`
 }
+
+// NewLinkDetails returns a new LinkDetails with the right
+// things stored
+func NewLinkDetails(expiresAfter *time.Time, url string) *LinkDetails {
+	return &LinkDetails{
+		ExpiresAfter: expiresAfter,
+		LoginURL:     url,
+	}
+}
