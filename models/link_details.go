@@ -2,6 +2,7 @@ package models
 
 import (
 	"encoding/json"
+	"fmt"
 	"time"
 )
 
@@ -29,4 +30,12 @@ func (l LinkDetails) ToJSONString() (string, error) {
 	}
 
 	return string(prettJSON), nil
+}
+
+// ToString converts the struct with the creds to a human readable string
+func (l LinkDetails) ToString() string {
+	result := fmt.Sprintf("This session will expire at %s", l.ExpiresAfter.Local().String())
+	result += "\n"
+	result += l.LoginURL
+	return result
 }
