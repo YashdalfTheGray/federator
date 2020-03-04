@@ -2,8 +2,9 @@ package models
 
 import (
 	"encoding/json"
-	"fmt"
 	"time"
+
+	"github.com/YashdalfTheGray/federator/utils"
 )
 
 // LinkDetails is a struct that contains the right things to
@@ -34,8 +35,7 @@ func (l LinkDetails) ToJSONString() (string, error) {
 
 // ToString converts the struct with the creds to a human readable string
 func (l LinkDetails) ToString() string {
-	result := fmt.Sprintf("This session will expire at %s", l.ExpiresAfter.Local().String())
-	result += "\n"
-	result += l.LoginURL
+	result := (utils.GetExpirationString(l.ExpiresAfter) + "\n")
+	result += (l.LoginURL + "\n")
 	return result
 }
