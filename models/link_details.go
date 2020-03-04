@@ -1,6 +1,9 @@
 package models
 
-import "time"
+import (
+	"encoding/json"
+	"time"
+)
 
 // LinkDetails is a struct that contains the right things to
 // help print out the login link once we have federated
@@ -16,4 +19,14 @@ func NewLinkDetails(expiresAfter *time.Time, url string) *LinkDetails {
 		ExpiresAfter: expiresAfter,
 		LoginURL:     url,
 	}
+}
+
+// ToJSONString converts the struct with the creds to a JSON object
+func (l LinkDetails) ToJSONString() (string, error) {
+	prettJSON, err := json.MarshalIndent(l, "", "  ")
+	if err != nil {
+		return "", nil
+	}
+
+	return string(prettJSON), nil
 }
