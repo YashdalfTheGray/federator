@@ -3,8 +3,6 @@ package models
 import (
 	"encoding/json"
 	"time"
-
-	"github.com/YashdalfTheGray/federator/utils"
 )
 
 // LinkDetails is a struct that contains the right things to
@@ -25,17 +23,17 @@ func NewLinkDetails(expiresAfter *time.Time, url string) *LinkDetails {
 
 // ToJSONString converts the struct with the creds to a JSON object
 func (l LinkDetails) ToJSONString() (string, error) {
-	prettJSON, err := json.MarshalIndent(l, "", "  ")
+	prettyJSON, err := json.MarshalIndent(l, "", "  ")
 	if err != nil {
 		return "", nil
 	}
 
-	return string(prettJSON), nil
+	return string(prettyJSON), nil
 }
 
 // ToString converts the struct with the creds to a human readable string
 func (l LinkDetails) ToString() string {
-	result := (utils.GetExpirationString(l.ExpiresAfter) + "\n")
+	result := (GetExpirationString(l.ExpiresAfter) + "\n")
 	result += (l.LoginURL + "\n")
 	return result
 }

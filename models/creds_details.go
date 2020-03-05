@@ -8,7 +8,6 @@ import (
 	"github.com/aws/aws-sdk-go/service/sts"
 
 	"github.com/YashdalfTheGray/federator/constants"
-	"github.com/YashdalfTheGray/federator/utils"
 )
 
 // CredsDetails holds all of the details we need to print
@@ -33,19 +32,19 @@ func NewCredsDetails(out *sts.AssumeRoleOutput) *CredsDetails {
 
 // ToJSONString converts the struct with the creds to a JSON object
 func (c CredsDetails) ToJSONString() (string, error) {
-	prettJSON, err := json.MarshalIndent(c, "", "  ")
+	prettyJSON, err := json.MarshalIndent(c, "", "  ")
 	if err != nil {
 		return "", nil
 	}
 
-	return string(prettJSON), nil
+	return string(prettyJSON), nil
 }
 
 // ToString converts the struct with the creds to a human readable string
 func (c CredsDetails) ToString() string {
 	result := (fmt.Sprintf("This session will expire at %s", c.ExpiresAfter.Local().String()) + "\n")
-	result += (utils.FormatEnvVar(constants.EnvAWSAccessKeyID, c.AccessKeyID) + "\n")
-	result += (utils.FormatEnvVar(constants.EnvAWSSecretAccessKey, c.SecretAccessKey) + "\n")
-	result += (utils.FormatEnvVar(constants.EnvAWSSessionToken, c.SessionToken) + "\n")
+	result += (FormatEnvVar(constants.EnvAWSAccessKeyID, c.AccessKeyID) + "\n")
+	result += (FormatEnvVar(constants.EnvAWSSecretAccessKey, c.SecretAccessKey) + "\n")
+	result += (FormatEnvVar(constants.EnvAWSSessionToken, c.SessionToken) + "\n")
 	return result
 }
