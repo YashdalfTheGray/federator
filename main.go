@@ -12,6 +12,7 @@ import (
 
 func main() {
 	var roleArn, issuerURL, destinationURL string
+	var outputJSON bool
 
 	linkCmd := flag.NewFlagSet("link", flag.ExitOnError)
 	linkCmd.StringVar(
@@ -32,6 +33,12 @@ func main() {
 		constants.DefaultDestination,
 		"the link that the user will be redirected to after login",
 	)
+	linkCmd.BoolVar(
+		&outputJSON,
+		"json",
+		false,
+		"output results as JSON rather than plain text",
+	)
 
 	credsCmd := flag.NewFlagSet("creds", flag.ExitOnError)
 	credsCmd.StringVar(
@@ -39,6 +46,12 @@ func main() {
 		"role-arn",
 		"",
 		"the role arn to assume for federating with AWS",
+	)
+	credsCmd.BoolVar(
+		&outputJSON,
+		"json",
+		false,
+		"output results as JSON rather than plain text",
 	)
 
 	if len(os.Args) < 2 {
@@ -67,7 +80,7 @@ func main() {
 		}
 		loginURL := utils.GetLoginURL(signinToken, issuerURL, destinationURL)
 
-		utils.PrintLoginURLDetails(creds, loginURL.String())
+		utils.PrintLoginURLDetails(creds, loginURL.String(), outputJSON)
 		os.Exit(0)
 		break
 	case "creds":
@@ -84,7 +97,7 @@ func main() {
 			log.Fatalln(credsErr.Error())
 		}
 
-		utils.PrintCredsFromSTSOutput(creds)
+		utils.PrintCredsFromSTSOutput(creds, outputJSON)
 		os.Exit(0)
 		break
 	case "-h", "--help":
