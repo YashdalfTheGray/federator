@@ -14,7 +14,7 @@ The other way to get this tool is to pull down the repository and run `make`. Th
 
 ## Running
 
-The federator tool has two modes, `link` and `creds`. These take the form of subcommands. The `link` subcommand gives you a link to sign into the AWS Console and the `creds` subcommand just gives you temporary credentials with the right commands to import it into a shell instance.
+The federator tool has two modes, `link` and `creds`. These take the form of subcommands. The `link` subcommand gives you a link to sign into the AWS Console and the `creds` subcommand just gives you temporary credentials with the right commands to import it into a shell instance. There is also a JSON output mode so that it can be machine readable or piped into something like [`jq`](https://stedolan.github.io/jq/).
 
 ```shell
 federator <subcommand> <options>
