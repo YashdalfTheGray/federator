@@ -2,6 +2,7 @@ package utils
 
 import (
 	"fmt"
+	"log"
 	"os"
 
 	"github.com/aws/aws-sdk-go/service/sts"
@@ -21,7 +22,11 @@ func PrintCredsFromSTSOutput(out *sts.AssumeRoleOutput, outputJSON bool) {
 	credsDetails := models.NewCredsDetails(out)
 
 	if outputJSON {
-		fmt.Println(credsDetails.ToJSONString())
+		jsonOutput, err := credsDetails.ToJSONString()
+		if err != nil {
+			log.Fatalln(err.Error())
+		}
+		fmt.Println(jsonOutput)
 	} else {
 		fmt.Println("Successfully authenticated with STS. Commands to use below.")
 		fmt.Println(credsDetails.ToString())
@@ -39,7 +44,11 @@ func PrintLoginURLDetails(out *sts.AssumeRoleOutput, loginURL string, outputJSON
 	linkDetails := models.NewLinkDetails(out.Credentials.Expiration, loginURL)
 
 	if outputJSON {
-		fmt.Println(linkDetails.ToJSONString())
+		jsonOutput, err := linkDetails.ToJSONString()
+		if err != nil {
+			log.Fatalln(err.Error())
+		}
+		fmt.Println(jsonOutput)
 	} else {
 		fmt.Println("Successfully authenticated with STS. Login URL below.")
 		fmt.Println(linkDetails.ToString())
