@@ -61,8 +61,11 @@ func main() {
 	switch os.Args[1] {
 	case "link":
 		linkCmd.Parse(os.Args[2:])
-		fmt.Println("Using AWS STS to get a federated console signin link...")
-		fmt.Print("\n")
+
+		if !outputJSON {
+			fmt.Println("Using AWS STS to get a federated console signin link...")
+			fmt.Print("\n")
+		}
 
 		if roleArn == "" {
 			log.Fatalln("the --role-arn flag is required for this subcommand")
@@ -85,8 +88,11 @@ func main() {
 		break
 	case "creds":
 		credsCmd.Parse(os.Args[2:])
-		fmt.Println("Using AWS STS to get temporary credentials...")
-		fmt.Print("\n")
+
+		if !outputJSON {
+			fmt.Println("Using AWS STS to get temporary credentials...")
+			fmt.Print("\n")
+		}
 
 		if roleArn == "" {
 			log.Fatalln("the --role-arn flag is required for this subcommand")
