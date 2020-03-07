@@ -15,7 +15,11 @@ import (
 // as well as the expiration information about the session
 func PrintCredsFromSTSOutput(out *sts.AssumeRoleOutput, outputJSON bool) {
 	if os.Getenv("CI_MODE") == "true" {
-		fmt.Println("<Running in quiet mode because of CI>")
+		if outputJSON {
+			fmt.Println("<Running in quiet mode because of CI but would print JSON>")
+		} else {
+			fmt.Println("<Running in quiet mode because of CI>")
+		}
 		return
 	}
 
@@ -37,7 +41,11 @@ func PrintCredsFromSTSOutput(out *sts.AssumeRoleOutput, outputJSON bool) {
 // of the session
 func PrintLoginURLDetails(out *sts.AssumeRoleOutput, loginURL string, outputJSON bool) {
 	if os.Getenv("CI_MODE") == "true" {
-		fmt.Println("<Running in quiet mode because of CI>")
+		if outputJSON {
+			fmt.Println("<Running in quiet mode because of CI but would print JSON>")
+		} else {
+			fmt.Println("<Running in quiet mode because of CI>")
+		}
 		return
 	}
 
