@@ -33,7 +33,7 @@ func GetSessionName(roleArn string) (string, error) {
 
 // AuthWithSTS uses a role ARN and the session with the default creds
 // to assume a role.
-func AuthWithSTS(roleArn string) (*sts.AssumeRoleOutput, error) {
+func AuthWithSTS(roleArn, externalID string) (*sts.AssumeRoleOutput, error) {
 	sesh := GetAWSSession(session.Options{
 		SharedConfigState: session.SharedConfigEnable,
 	})
@@ -48,6 +48,10 @@ func AuthWithSTS(roleArn string) (*sts.AssumeRoleOutput, error) {
 	serviceAssumeRoleInput := &sts.AssumeRoleInput{
 		RoleArn:         &roleArn,
 		RoleSessionName: &roleSessionName,
+	}
+
+	if externalID != "" {
+		serviceAssumeRoleInput.ExternalId = &externalID
 	}
 
 	return stsClient.AssumeRole(serviceAssumeRoleInput)
