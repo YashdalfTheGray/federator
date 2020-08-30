@@ -11,7 +11,7 @@ import (
 )
 
 func main() {
-	var roleArn, issuerURL, destinationURL string
+	var roleArn, issuerURL, destinationURL, externalID string
 	var outputJSON bool
 
 	linkCmd := flag.NewFlagSet("link", flag.ExitOnError)
@@ -20,6 +20,12 @@ func main() {
 		"role-arn",
 		"",
 		"the role arn to assume for federating with AWS",
+	)
+	linkCmd.StringVar(
+		&externalID,
+		"external-id",
+		"",
+		"the external ID that can optionally be provided if the assume role requires it",
 	)
 	linkCmd.StringVar(
 		&issuerURL,
@@ -46,6 +52,12 @@ func main() {
 		"role-arn",
 		"",
 		"the role arn to assume for federating with AWS",
+	)
+	credsCmd.StringVar(
+		&externalID,
+		"external-id",
+		"",
+		"the external ID that can optionally be provided if the assume role requires it",
 	)
 	credsCmd.BoolVar(
 		&outputJSON,
