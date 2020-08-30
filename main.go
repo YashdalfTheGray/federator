@@ -83,7 +83,7 @@ func main() {
 			log.Fatalln("the --role-arn flag is required for this subcommand")
 		}
 
-		creds, credsErr := utils.AuthWithSTS(roleArn)
+		creds, credsErr := utils.AuthWithSTS(roleArn, externalID)
 		if credsErr != nil {
 			log.Fatalln(credsErr.Error())
 		}
@@ -110,7 +110,7 @@ func main() {
 			log.Fatalln("the --role-arn flag is required for this subcommand")
 		}
 
-		creds, credsErr := utils.AuthWithSTS(roleArn)
+		creds, credsErr := utils.AuthWithSTS(roleArn, externalID)
 		if credsErr != nil {
 			log.Fatalln(credsErr.Error())
 		}
