@@ -70,3 +70,26 @@ func AuthWithSTS(roleArn, externalID string) (*sts.AssumeRoleOutput, error) {
 
 	return stsClient.AssumeRole(serviceAssumeRoleInput)
 }
+
+// AuthWithSTSv2 uses a role ARN and the session with the default creds
+// to assume a role.
+func AuthWithSTSv2(roleArn, externalID string) (*stsv2.AssumeRoleResponse, error) {
+	roleSessionName, roleSessionNameErr := GetSessionName(roleArn)
+	if roleSessionNameErr != nil {
+		log.Fatalln(roleSessionNameErr.Error())
+	}
+
+	config := GetAWSConfig()
+	svc := stsv2.New(config)
+
+	input := &stsv2.AssumeRoleInput{
+		RoleArn:         aws.String(roleArn),
+		RoleSessionName: &roleSessionName,
+	}
+
+	if externalID != "" {
+		input.ExternalId = &externalID
+	}
+
+	return svc.AssumeRoleRequest(input).Send(context.TODO())
+}
