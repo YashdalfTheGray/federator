@@ -1,20 +1,34 @@
 package utils
 
 import (
+	"context"
 	"errors"
 	"fmt"
 	"log"
 	"os"
 	"regexp"
 
+	"github.com/aws/aws-sdk-go-v2/aws"
+	"github.com/aws/aws-sdk-go-v2/aws/external"
+	stsv2 "github.com/aws/aws-sdk-go-v2/service/sts"
 	"github.com/aws/aws-sdk-go/aws/session"
-	"github.com/aws/aws-sdk-go/service/sts"
+	sts "github.com/aws/aws-sdk-go/service/sts"
 )
 
 // GetAWSSession returns a session that uses the currently configured
 // AWS CLI credentials
 func GetAWSSession(options session.Options) *session.Session {
 	return session.Must(session.NewSessionWithOptions(options))
+}
+
+// GetAWSConfig pulls the default config from the AWS CLI
+func GetAWSConfig() aws.Config {
+	config, err := external.LoadDefaultAWSConfig()
+	if err != nil {
+		panic("error loading default config")
+	}
+
+	return config
 }
 
 // GetSessionName returns a session name appropriate for use as the
