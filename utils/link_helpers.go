@@ -8,6 +8,7 @@ import (
 	"net/url"
 	"time"
 
+	stsv2 "github.com/aws/aws-sdk-go-v2/service/sts"
 	"github.com/aws/aws-sdk-go/service/sts"
 
 	"github.com/YashdalfTheGray/federator/constants"
@@ -34,9 +35,47 @@ func GetSessionString(creds *sts.AssumeRoleOutput) string {
 	return string(sessionStr)
 }
 
+// GetSessionStringv2 returns a JSON.stringified representation of
+// the session object
+func GetSessionStringv2(creds *stsv2.AssumeRoleResponse) string {
+	session := struct {
+		SessionID    string `json:"sessionId"`
+		SessionKey   string `json:"sessionKey"`
+		SessionToken string `json:"sessionToken"`
+	}{
+		SessionID:    *creds.Credentials.AccessKeyId,
+		SessionKey:   *creds.Credentials.SecretAccessKey,
+		SessionToken: *creds.Credentials.SessionToken,
+	}
+
+	sessionStr, err := json.Marshal(session)
+	if err != nil {
+		log.Fatalln(err.Error())
+	}
+
+	return string(sessionStr)
+}
+
 // GetSigninTokenURL builds a url.URL object using the particulars from the
 // session string and the federation URL
-func GetSigninTokenURL(creds *sts.AssumeRoleOutput) url.URL {
+func GetSigninTokenURL(creds *stsv2.AssumeRoleResponse) url.URL {
+	u, err := url.Parse(constants.FederationEndpoint)
+	if err != nil {
+		log.Fatalln(err.Error())
+	}
+
+	q := u.Query()
+	q.Set("Action", "getSigninToken")
+	q.Set("SessionDuration", "3600")
+	q.Set("Session", GetSessionStringv2(creds))
+
+	u.RawQuery = q.Encode()
+	return *u
+}
+
+// GetSigninTokenURLv2 builds a url.URL object using the particulars from the
+// session string and the federation URL
+func GetSigninTokenURLv2(creds *sts.AssumeRoleOutput) url.URL {
 	u, err := url.Parse(constants.FederationEndpoint)
 	if err != nil {
 		log.Fatalln(err.Error())
