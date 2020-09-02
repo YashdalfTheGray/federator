@@ -5,8 +5,7 @@ import (
 	"fmt"
 	"time"
 
-	stsv2 "github.com/aws/aws-sdk-go-v2/service/sts"
-	"github.com/aws/aws-sdk-go/service/sts"
+	"github.com/aws/aws-sdk-go-v2/service/sts"
 
 	"github.com/YashdalfTheGray/federator/constants"
 )
@@ -22,18 +21,7 @@ type CredsDetails struct {
 
 // NewCredsDetails returns a new CredsDetails object with the
 // right things
-func NewCredsDetails(out *sts.AssumeRoleOutput) *CredsDetails {
-	return &CredsDetails{
-		ExpiresAfter:    out.Credentials.Expiration,
-		AccessKeyID:     *out.Credentials.AccessKeyId,
-		SecretAccessKey: *out.Credentials.SecretAccessKey,
-		SessionToken:    *out.Credentials.SessionToken,
-	}
-}
-
-// NewCredsDetailsv2 returns a new CredsDetails object with the
-// right things
-func NewCredsDetailsv2(out *stsv2.AssumeRoleResponse) *CredsDetails {
+func NewCredsDetails(out *sts.AssumeRoleResponse) *CredsDetails {
 	return &CredsDetails{
 		ExpiresAfter:    out.Credentials.Expiration,
 		AccessKeyID:     *out.Credentials.AccessKeyId,
