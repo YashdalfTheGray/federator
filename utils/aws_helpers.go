@@ -10,16 +10,8 @@ import (
 
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/aws/external"
-	stsv2 "github.com/aws/aws-sdk-go-v2/service/sts"
-	"github.com/aws/aws-sdk-go/aws/session"
-	sts "github.com/aws/aws-sdk-go/service/sts"
+	"github.com/aws/aws-sdk-go-v2/service/sts"
 )
-
-// GetAWSSession returns a session that uses the currently configured
-// AWS CLI credentials
-func GetAWSSession(options session.Options) *session.Session {
-	return session.Must(session.NewSessionWithOptions(options))
-}
 
 // GetAWSConfig pulls the default config from the AWS CLI
 func GetAWSConfig() aws.Config {
@@ -47,42 +39,16 @@ func GetSessionName(roleArn string) (string, error) {
 
 // AuthWithSTS uses a role ARN and the session with the default creds
 // to assume a role.
-func AuthWithSTS(roleArn, externalID string) (*sts.AssumeRoleOutput, error) {
-	sesh := GetAWSSession(session.Options{
-		SharedConfigState: session.SharedConfigEnable,
-	})
-
-	roleSessionName, roleSessionNameErr := GetSessionName(roleArn)
-	if roleSessionNameErr != nil {
-		log.Fatalln(roleSessionNameErr.Error())
-	}
-
-	stsClient := sts.New(sesh)
-
-	serviceAssumeRoleInput := &sts.AssumeRoleInput{
-		RoleArn:         &roleArn,
-		RoleSessionName: &roleSessionName,
-	}
-
-	if externalID != "" {
-		serviceAssumeRoleInput.ExternalId = &externalID
-	}
-
-	return stsClient.AssumeRole(serviceAssumeRoleInput)
-}
-
-// AuthWithSTSv2 uses a role ARN and the session with the default creds
-// to assume a role.
-func AuthWithSTSv2(roleArn, externalID string) (*stsv2.AssumeRoleResponse, error) {
+func AuthWithSTS(roleArn, externalID string) (*sts.AssumeRoleResponse, error) {
 	roleSessionName, roleSessionNameErr := GetSessionName(roleArn)
 	if roleSessionNameErr != nil {
 		log.Fatalln(roleSessionNameErr.Error())
 	}
 
 	config := GetAWSConfig()
-	svc := stsv2.New(config)
+	svc := sts.New(config)
 
-	input := &stsv2.AssumeRoleInput{
+	input := &sts.AssumeRoleInput{
 		RoleArn:         aws.String(roleArn),
 		RoleSessionName: &roleSessionName,
 	}
