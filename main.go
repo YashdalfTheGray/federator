@@ -83,19 +83,19 @@ func main() {
 			log.Fatalln("the --role-arn flag is required for this subcommand")
 		}
 
-		credsv2, credsv2Err := utils.AuthWithSTSv2(roleArn, externalID)
-		if credsv2Err != nil {
-			log.Fatalln(credsv2Err.Error())
+		creds, credsErr := utils.AuthWithSTS(roleArn, externalID)
+		if credsErr != nil {
+			log.Fatalln(credsErr.Error())
 		}
 
-		signinTokenURL := utils.GetSigninTokenURL(credsv2)
+		signinTokenURL := utils.GetSigninTokenURL(creds)
 		signinToken, signinErr := utils.GetSigninToken(signinTokenURL)
 		if signinErr != nil {
 			log.Fatalln(signinErr.Error())
 		}
 		loginURL := utils.GetLoginURL(signinToken, issuerURL, destinationURL)
 
-		utils.PrintLoginURLDetailsv2(credsv2, loginURL.String(), outputJSON)
+		utils.PrintLoginURLDetailsv2(creds, loginURL.String(), outputJSON)
 		os.Exit(0)
 		break
 	case "creds":
@@ -110,12 +110,12 @@ func main() {
 			log.Fatalln("the --role-arn flag is required for this subcommand")
 		}
 
-		credsv2, credsv2Err := utils.AuthWithSTSv2(roleArn, externalID)
-		if credsv2Err != nil {
-			log.Fatalln(credsv2Err.Error())
+		creds, credsErr := utils.AuthWithSTS(roleArn, externalID)
+		if credsErr != nil {
+			log.Fatalln(credsErr.Error())
 		}
 
-		utils.PrintCredsFromSTSResponse(credsv2, outputJSON)
+		utils.PrintCredsFromSTSResponse(creds, outputJSON)
 		os.Exit(0)
 		break
 	case "-h", "--help":
