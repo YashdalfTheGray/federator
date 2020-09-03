@@ -5,6 +5,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [v2.0.0](https://github.com/YashdalfTheGray/federator/tree/v2.0.0) (2020-09-03)
+
+### Modified
+
+- started using the AWS SDK version 2
+
 ## [v1.2.0](https://github.com/YashdalfTheGray/federator/tree/v1.2.0) (2020-08-31)
 
 ### Added
