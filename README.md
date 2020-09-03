@@ -10,7 +10,7 @@ A utility to federate into an AWS account using AWS Security Token Service and t
 
 The easiest way to install this tool is to grab the built binary from the releases, put it somewhere that is in your path, run a quick `chmod +x <path_to_federator>` and you'll be good to go.
 
-The other way to get this tool is to pull down the repository and run `make`. This will put a file called `federator` in the `bin` folder in the root of the project directory. Since we the AWS SDK 2 for Go, we are required to use Go 1.13 or higher.
+The other way to get this tool is to pull down the repository and run `make`. This will put a file called `federator` in the `bin` folder in the root of the project directory. Since we use the AWS SDK v2 for Go, we are required to use Go 1.13 or higher. Additionally, since this package uses Go modules, it also requires Go 1.13.
 
 ## Running
 
