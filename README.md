@@ -25,8 +25,9 @@ The arguments that each subcommand can take are listed below with the subcommand
 | Parameter       | Subcommand      | Defaults                                    | Description                                                        |
 | --------------- | --------------- | ------------------------------------------- | ------------------------------------------------------------------ |
 | `--role-arn`    | `link`, `creds` | --                                          | The ARN of the role to assume                                      |
-| `--external-id` | `link`, `creds` | ""                                          | The external ID, if necessary, to be provided                      |
-| `--json`        | `link`, `creds` | false                                       | Whether to print out the results in JSON or plain text             |
+| `--external-id` | `link`, `creds` | "" (empty string)                           | The external ID, if necessary, to be provided                      |
+| `--region`      | `link`, `creds` | from the CLI config                         | The region to make the STS call against                            |
+| `--json`        | `link`, `creds` | `false`                                     | Whether to print out the results in JSON or plain text             |
 | `--issuer`      | `link`          | https://aws.amazon.com                      | The link where the user will be taken when the session has expired |
 | `--destination` | `link`          | https://console.aws.amazon.com/console/home | The link that the user will be redirected to after login           |
 
