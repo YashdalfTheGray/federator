@@ -23,6 +23,19 @@ func GetAWSConfig() aws.Config {
 	return config
 }
 
+// GetAWSConfigForRegion pulls the credentials from the AWS
+// CLI configuration but allows a region override
+func GetAWSConfigForRegion(region string) aws.Config {
+	config, err := external.LoadDefaultAWSConfig(
+		external.WithRegion(region),
+	)
+	if err != nil {
+		panic("error loading default config")
+	}
+
+	return config
+}
+
 // GetSessionName returns a session name appropriate for use as the
 // AssumeRole role session name parameter
 func GetSessionName(roleArn string) (string, error) {
