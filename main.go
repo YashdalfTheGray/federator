@@ -11,7 +11,7 @@ import (
 )
 
 func main() {
-	var roleArn, issuerURL, destinationURL, externalID string
+	var roleArn, issuerURL, destinationURL, externalID, region string
 	var outputJSON bool
 
 	linkCmd := flag.NewFlagSet("link", flag.ExitOnError)
@@ -26,6 +26,12 @@ func main() {
 		"external-id",
 		"",
 		"the external ID that can optionally be provided if the assume role requires it",
+	)
+	linkCmd.StringVar(
+		&region,
+		"region",
+		"",
+		"the region to make the call against, will be read from the CLI config if omitted",
 	)
 	linkCmd.StringVar(
 		&issuerURL,
@@ -58,6 +64,12 @@ func main() {
 		"external-id",
 		"",
 		"the external ID that can optionally be provided if the assume role requires it",
+	)
+	credsCmd.StringVar(
+		&region,
+		"region",
+		"",
+		"the region to make the call against, will be read from the CLI config if omitted",
 	)
 	credsCmd.BoolVar(
 		&outputJSON,
