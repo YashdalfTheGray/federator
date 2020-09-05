@@ -5,6 +5,9 @@ artifacts
 .artifacts-stamp
 hue-remote-v2
 
+# vscode because why not
+.vscode
+
 # env files
 *.env
 
