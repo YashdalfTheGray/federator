@@ -96,7 +96,10 @@ func main() {
 		}
 
 		if !outputJSON {
-			fmt.Println("Using AWS STS to get a federated console signin link...")
+			fmt.Printf(
+				"Using AWS STS in region %s to get a federated console signin link...\n",
+				config.Region,
+			)
 			fmt.Print("\n")
 		}
 
@@ -104,7 +107,7 @@ func main() {
 			log.Fatalln("the --role-arn flag is required for this subcommand")
 		}
 
-		creds, credsErr := utils.AuthWithSTS(roleArn, externalID)
+		creds, credsErr := utils.AuthWithSTS(roleArn, externalID, config)
 		if credsErr != nil {
 			log.Fatalln(credsErr.Error())
 		}
@@ -129,7 +132,10 @@ func main() {
 		}
 
 		if !outputJSON {
-			fmt.Println("Using AWS STS to get temporary credentials...")
+			fmt.Printf(
+				"Using AWS STS in region %s to get temporary credentials...\n",
+				config.Region,
+			)
 			fmt.Print("\n")
 		}
 
@@ -137,7 +143,7 @@ func main() {
 			log.Fatalln("the --role-arn flag is required for this subcommand")
 		}
 
-		creds, credsErr := utils.AuthWithSTS(roleArn, externalID)
+		creds, credsErr := utils.AuthWithSTS(roleArn, externalID, config)
 		if credsErr != nil {
 			log.Fatalln(credsErr.Error())
 		}

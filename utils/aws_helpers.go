@@ -52,13 +52,12 @@ func GetSessionName(roleArn string) (string, error) {
 
 // AuthWithSTS uses a role ARN and the session with the default creds
 // to assume a role.
-func AuthWithSTS(roleArn, externalID string) (*sts.AssumeRoleResponse, error) {
+func AuthWithSTS(roleArn, externalID string, config aws.Config) (*sts.AssumeRoleResponse, error) {
 	roleSessionName, roleSessionNameErr := GetSessionName(roleArn)
 	if roleSessionNameErr != nil {
 		log.Fatalln(roleSessionNameErr.Error())
 	}
 
-	config := GetAWSConfig()
 	svc := sts.New(config)
 
 	input := &sts.AssumeRoleInput{
