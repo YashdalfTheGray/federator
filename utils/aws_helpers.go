@@ -26,12 +26,12 @@ func GetAWSConfig() aws.Config {
 // GetAWSConfigForRegion pulls the credentials from the AWS
 // CLI configuration but allows a region override
 func GetAWSConfigForRegion(region string) aws.Config {
-	config, err := external.LoadDefaultAWSConfig(
-		external.WithRegion(region),
-	)
+	config, err := external.LoadDefaultAWSConfig()
 	if err != nil {
 		panic("error loading default config")
 	}
+
+	config.Region = region
 
 	return config
 }
