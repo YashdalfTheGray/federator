@@ -6,6 +6,8 @@ import (
 	"log"
 	"os"
 
+	"github.com/aws/aws-sdk-go-v2/aws"
+
 	"github.com/YashdalfTheGray/federator/constants"
 	"github.com/YashdalfTheGray/federator/utils"
 )
@@ -13,6 +15,7 @@ import (
 func main() {
 	var roleArn, issuerURL, destinationURL, externalID, region string
 	var outputJSON bool
+	var config aws.Config
 
 	linkCmd := flag.NewFlagSet("link", flag.ExitOnError)
 	linkCmd.StringVar(
@@ -86,6 +89,12 @@ func main() {
 	case "link":
 		linkCmd.Parse(os.Args[2:])
 
+		if region == "" {
+			config = utils.GetAWSConfig()
+		} else {
+			config = utils.GetAWSConfigForRegion(region)
+		}
+
 		if !outputJSON {
 			fmt.Println("Using AWS STS to get a federated console signin link...")
 			fmt.Print("\n")
@@ -112,6 +121,12 @@ func main() {
 		break
 	case "creds":
 		credsCmd.Parse(os.Args[2:])
+
+		if region == "" {
+			config = utils.GetAWSConfig()
+		} else {
+			config = utils.GetAWSConfigForRegion(region)
+		}
 
 		if !outputJSON {
 			fmt.Println("Using AWS STS to get temporary credentials...")
