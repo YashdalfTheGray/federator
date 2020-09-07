@@ -20,6 +20,8 @@ The federator tool has two modes, `link` and `creds`. These take the form of sub
 federator <subcommand> <options>
 ```
 
+### Command line flags
+
 The arguments that each subcommand can take are listed below with the subcommands that they are compatible with.
 
 | Parameter       | Subcommand      | Defaults                                    | Description                                                        |
@@ -30,6 +32,24 @@ The arguments that each subcommand can take are listed below with the subcommand
 | `--json`        | `link`, `creds` | `false`                                     | Whether to print out the results in JSON or plain text             |
 | `--issuer`      | `link`          | https://aws.amazon.com                      | The link where the user will be taken when the session has expired |
 | `--destination` | `link`          | https://console.aws.amazon.com/console/home | The link that the user will be redirected to after login           |
+
+### Examples
+
+These examples assume that you have `federator` in your path already.
+
+```sh
+# get creds for a role without an external ID requirement
+federator creds --role-arn arn:aws:iam::000000000000:role/someRole
+
+# get a console link and provide an external ID
+federator link --role-arn arn:aws:iam::000000000000:role/someRole --external-id "some external id"
+
+# Use a regional STS endpoint different from the one configured with the CLI
+federator creds --role-arn arn:aws:iam::000000000000:role/someRole --region us-east-1
+
+# Change the output to json
+federator link --role-arn arn:aws:iam::000000000000:role/someRole --json
+```
 
 ## Development
 
