@@ -9,6 +9,7 @@ import (
 	"github.com/aws/aws-sdk-go-v2/aws"
 
 	"github.com/YashdalfTheGray/federator/constants"
+	"github.com/YashdalfTheGray/federator/subcommands"
 	"github.com/YashdalfTheGray/federator/utils"
 )
 
@@ -17,43 +18,11 @@ func main() {
 	var outputJSON bool
 	var config aws.Config
 
-	linkCmd := flag.NewFlagSet("link", flag.ExitOnError)
-	linkCmd.StringVar(
-		&roleArn,
-		"role-arn",
-		"",
-		"the role arn to assume for federating with AWS",
-	)
-	linkCmd.StringVar(
-		&externalID,
-		"external-id",
-		"",
-		"the external ID that can optionally be provided if the assume role requires it",
-	)
-	linkCmd.StringVar(
-		&region,
-		"region",
-		"",
-		"the region to make the call against, will be read from the CLI config if omitted",
-	)
-	linkCmd.StringVar(
-		&issuerURL,
-		"issuer",
-		constants.DefaultIssuer,
-		"the link where the user will be taken when the session has expired",
-	)
-	linkCmd.StringVar(
-		&destinationURL,
-		"destination",
-		constants.DefaultDestination,
-		"the link that the user will be redirected to after login",
-	)
-	linkCmd.BoolVar(
-		&outputJSON,
-		"json",
-		false,
-		"output results as JSON rather than plain text",
-	)
+	argsWithoutCommand := make([]string, 10)
+	copy(argsWithoutCommand, os.Args[2:])
+
+	linkCmd := subcommands.NewLinkSubcommand()
+	linkCmd.Setup()
 
 	credsCmd := flag.NewFlagSet("creds", flag.ExitOnError)
 	credsCmd.StringVar(
@@ -87,15 +56,15 @@ func main() {
 
 	switch os.Args[1] {
 	case "link":
-		linkCmd.Parse(os.Args[2:])
+		linkCmd.Parse(argsWithoutCommand)
 
-		if region == "" {
+		if linkCmd.Parsed.Region == "" {
 			config = utils.GetAWSConfig()
 		} else {
 			config = utils.GetAWSConfigForRegion(region)
 		}
 
-		if !outputJSON {
+		if !linkCmd.Parsed.OutputJSON {
 			fmt.Printf(
 				"Using AWS STS in region %s to get a federated console signin link...\n",
 				config.Region,
@@ -103,11 +72,15 @@ func main() {
 			fmt.Print("\n")
 		}
 
-		if roleArn == "" {
+		if linkCmd.Parsed.RoleArn == "" {
 			log.Fatalln("the --role-arn flag is required for this subcommand")
 		}
 
-		creds, credsErr := utils.AuthWithSTS(roleArn, externalID, config)
+		creds, credsErr := utils.AuthWithSTS(
+			linkCmd.Parsed.RoleArn,
+			linkCmd.Parsed.ExternalID,
+			config,
+		)
 		if credsErr != nil {
 			log.Fatalln(credsErr.Error())
 		}
@@ -119,7 +92,7 @@ func main() {
 		}
 		loginURL := utils.GetLoginURL(signinToken, issuerURL, destinationURL)
 
-		utils.PrintLoginURLDetailsv2(creds, loginURL.String(), outputJSON)
+		utils.PrintLoginURLDetailsv2(creds, loginURL.String(), linkCmd.Parsed.OutputJSON)
 		os.Exit(0)
 		break
 	case "creds":

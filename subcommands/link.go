@@ -2,6 +2,7 @@ package subcommands
 
 import (
 	"flag"
+	"fmt"
 	"io"
 
 	"github.com/YashdalfTheGray/federator/constants"
@@ -35,39 +36,40 @@ func NewLinkSubcommand() LinkSubcommand {
 }
 
 // Setup will setup the subcommand with flags and descriptions.
-func (cmd LinkSubcommand) Setup() {
-	linkCmd := flag.NewFlagSet("link", flag.ExitOnError)
-	linkCmd.StringVar(
+func (cmd *LinkSubcommand) Setup() {
+	cmd.subcommand = flag.NewFlagSet("link", flag.ExitOnError)
+
+	cmd.subcommand.StringVar(
 		&cmd.Parsed.RoleArn,
 		"role-arn",
 		"",
 		"the role arn to assume for federating with AWS",
 	)
-	linkCmd.StringVar(
+	cmd.subcommand.StringVar(
 		&cmd.Parsed.ExternalID,
 		"external-id",
 		"",
 		"the external ID that can optionally be provided if the assume role requires it",
 	)
-	linkCmd.StringVar(
+	cmd.subcommand.StringVar(
 		&cmd.Parsed.Region,
 		"region",
 		"",
 		"the region to make the call against, will be read from the CLI config if omitted",
 	)
-	linkCmd.StringVar(
+	cmd.subcommand.StringVar(
 		&cmd.Parsed.IssuerURL,
 		"issuer",
 		constants.DefaultIssuer,
 		"the link where the user will be taken when the session has expired",
 	)
-	linkCmd.StringVar(
+	cmd.subcommand.StringVar(
 		&cmd.Parsed.DestinationURL,
 		"destination",
 		constants.DefaultDestination,
 		"the link that the user will be redirected to after login",
 	)
-	linkCmd.BoolVar(
+	cmd.subcommand.BoolVar(
 		&cmd.Parsed.OutputJSON,
 		"json",
 		false,
@@ -77,6 +79,7 @@ func (cmd LinkSubcommand) Setup() {
 
 // Parse will parse the flags, according to the arguments setup in .Setup
 func (cmd LinkSubcommand) Parse(args []string) error {
+	fmt.Println(args)
 	return cmd.subcommand.Parse(args)
 }
 
