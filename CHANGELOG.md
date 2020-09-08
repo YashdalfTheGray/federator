@@ -5,6 +5,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [v2.1.0](https://github.com/YashdalfTheGray/federator/tree/v2.1.0) (2020-09-08)
+
+### Added
+
+- A `--region` flag to target a specific STS endpoint, defaults to the CLI configured region
+
 ## [v2.0.0](https://github.com/YashdalfTheGray/federator/tree/v2.0.0) (2020-09-04)
 
 ### Modified
