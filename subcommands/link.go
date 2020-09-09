@@ -2,7 +2,6 @@ package subcommands
 
 import (
 	"flag"
-	"fmt"
 	"io"
 
 	"github.com/YashdalfTheGray/federator/constants"
@@ -79,7 +78,6 @@ func (cmd *LinkSubcommand) Setup() {
 
 // Parse will parse the flags, according to the arguments setup in .Setup
 func (cmd LinkSubcommand) Parse(args []string) error {
-	fmt.Println(args)
 	return cmd.subcommand.Parse(args)
 }
 

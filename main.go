@@ -61,7 +61,7 @@ func main() {
 		if linkCmd.Parsed.Region == "" {
 			config = utils.GetAWSConfig()
 		} else {
-			config = utils.GetAWSConfigForRegion(region)
+			config = utils.GetAWSConfigForRegion(linkCmd.Parsed.Region)
 		}
 
 		if !linkCmd.Parsed.OutputJSON {
