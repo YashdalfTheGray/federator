@@ -18,9 +18,6 @@ func main() {
 	var outputJSON bool
 	var config aws.Config
 
-	argsWithoutCommand := make([]string, 10)
-	copy(argsWithoutCommand, os.Args[2:])
-
 	linkCmd := subcommands.NewLinkSubcommand()
 	linkCmd.Setup()
 
@@ -56,7 +53,7 @@ func main() {
 
 	switch os.Args[1] {
 	case "link":
-		linkCmd.Parse(argsWithoutCommand)
+		linkCmd.Parse(os.Args[2:])
 
 		if linkCmd.Parsed.Region == "" {
 			config = utils.GetAWSConfig()
