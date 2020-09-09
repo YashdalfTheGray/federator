@@ -1,7 +1,6 @@
 package main
 
 import (
-	"flag"
 	"fmt"
 	"log"
 	"os"
@@ -14,38 +13,13 @@ import (
 )
 
 func main() {
-	var roleArn, issuerURL, destinationURL, externalID, region string
-	var outputJSON bool
 	var config aws.Config
 
 	linkCmd := subcommands.NewLinkSubcommand()
 	linkCmd.Setup()
 
-	credsCmd := flag.NewFlagSet("creds", flag.ExitOnError)
-	credsCmd.StringVar(
-		&roleArn,
-		"role-arn",
-		"",
-		"the role arn to assume for federating with AWS",
-	)
-	credsCmd.StringVar(
-		&externalID,
-		"external-id",
-		"",
-		"the external ID that can optionally be provided if the assume role requires it",
-	)
-	credsCmd.StringVar(
-		&region,
-		"region",
-		"",
-		"the region to make the call against, will be read from the CLI config if omitted",
-	)
-	credsCmd.BoolVar(
-		&outputJSON,
-		"json",
-		false,
-		"output results as JSON rather than plain text",
-	)
+	credsCmd := subcommands.NewCredsSubcommand()
+	credsCmd.Setup()
 
 	if len(os.Args) < 2 {
 		log.Fatalln("This executable needs a subcommand and options to work. Use -h for help.")
@@ -87,7 +61,11 @@ func main() {
 		if signinErr != nil {
 			log.Fatalln(signinErr.Error())
 		}
-		loginURL := utils.GetLoginURL(signinToken, issuerURL, destinationURL)
+		loginURL := utils.GetLoginURL(
+			signinToken,
+			linkCmd.Parsed.IssuerURL,
+			linkCmd.Parsed.DestinationURL,
+		)
 
 		utils.PrintLoginURLDetailsv2(creds, loginURL.String(), linkCmd.Parsed.OutputJSON)
 		os.Exit(0)
@@ -95,13 +73,13 @@ func main() {
 	case "creds":
 		credsCmd.Parse(os.Args[2:])
 
-		if region == "" {
+		if credsCmd.Parsed.Region == "" {
 			config = utils.GetAWSConfig()
 		} else {
-			config = utils.GetAWSConfigForRegion(region)
+			config = utils.GetAWSConfigForRegion(credsCmd.Parsed.Region)
 		}
 
-		if !outputJSON {
+		if !credsCmd.Parsed.OutputJSON {
 			fmt.Printf(
 				"Using AWS STS in region %s to get temporary credentials...\n",
 				config.Region,
@@ -109,16 +87,20 @@ func main() {
 			fmt.Print("\n")
 		}
 
-		if roleArn == "" {
+		if credsCmd.Parsed.RoleArn == "" {
 			log.Fatalln("the --role-arn flag is required for this subcommand")
 		}
 
-		creds, credsErr := utils.AuthWithSTS(roleArn, externalID, config)
+		creds, credsErr := utils.AuthWithSTS(
+			credsCmd.Parsed.RoleArn,
+			credsCmd.Parsed.ExternalID,
+			config,
+		)
 		if credsErr != nil {
 			log.Fatalln(credsErr.Error())
 		}
 
-		utils.PrintCredsFromSTSResponse(creds, outputJSON)
+		utils.PrintCredsFromSTSResponse(creds, credsCmd.Parsed.OutputJSON)
 		os.Exit(0)
 		break
 	case "-h", "--help":
