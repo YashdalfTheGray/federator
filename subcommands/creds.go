@@ -3,6 +3,9 @@ package subcommands
 import (
 	"flag"
 	"io"
+	"log"
+
+	"github.com/YashdalfTheGray/federator/utils"
 )
 
 // CredsSubcommandParsedArgs holds all the bits of data that are
@@ -60,6 +63,17 @@ func (cmd *CredsSubcommand) Setup() {
 		false,
 		"output results as JSON rather than plain text",
 	)
+}
+
+// Validate runs some general validations on the arguments
+func (cmd CredsSubcommand) Validate() {
+	if cmd.Parsed.Region != "" && utils.ValidateRegion(cmd.Parsed.Region) {
+		log.Fatalln("invalid value passed into for the --region flag")
+	}
+
+	if cmd.Parsed.RoleArn == "" {
+		log.Fatalln("the --role-arn flag is required for this subcommand")
+	}
 }
 
 // Parse will parse the flags, according to the arguments setup in .Setup
