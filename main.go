@@ -28,6 +28,7 @@ func main() {
 	switch os.Args[1] {
 	case "link":
 		linkCmd.Parse(os.Args[2:])
+		linkCmd.Validate()
 
 		if linkCmd.Parsed.Region == "" {
 			config = utils.GetAWSConfig()
@@ -41,10 +42,6 @@ func main() {
 				config.Region,
 			)
 			fmt.Print("\n")
-		}
-
-		if linkCmd.Parsed.RoleArn == "" {
-			log.Fatalln("the --role-arn flag is required for this subcommand")
 		}
 
 		creds, credsErr := utils.AuthWithSTS(
@@ -72,6 +69,7 @@ func main() {
 		break
 	case "creds":
 		credsCmd.Parse(os.Args[2:])
+		credsCmd.Validate()
 
 		if credsCmd.Parsed.Region == "" {
 			config = utils.GetAWSConfig()
@@ -85,10 +83,6 @@ func main() {
 				config.Region,
 			)
 			fmt.Print("\n")
-		}
-
-		if credsCmd.Parsed.RoleArn == "" {
-			log.Fatalln("the --role-arn flag is required for this subcommand")
 		}
 
 		creds, credsErr := utils.AuthWithSTS(
