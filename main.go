@@ -30,11 +30,7 @@ func main() {
 		linkCmd.Parse(os.Args[2:])
 		linkCmd.Validate()
 
-		if linkCmd.Parsed.Region == "" {
-			config = utils.GetAWSConfig()
-		} else {
-			config = utils.GetAWSConfigForRegion(linkCmd.Parsed.Region)
-		}
+		config = linkCmd.GetAWSConfig()
 
 		if !linkCmd.Parsed.OutputJSON {
 			fmt.Printf(
@@ -71,11 +67,7 @@ func main() {
 		credsCmd.Parse(os.Args[2:])
 		credsCmd.Validate()
 
-		if credsCmd.Parsed.Region == "" {
-			config = utils.GetAWSConfig()
-		} else {
-			config = utils.GetAWSConfigForRegion(credsCmd.Parsed.Region)
-		}
+		config = credsCmd.GetAWSConfig()
 
 		if !credsCmd.Parsed.OutputJSON {
 			fmt.Printf(
