@@ -80,8 +80,8 @@ func (cmd *LinkSubcommand) Setup() {
 
 // Validate runs some general validations on the arguments
 func (cmd LinkSubcommand) Validate() {
-	if cmd.Parsed.Region != "" && utils.ValidateRegion(cmd.Parsed.Region) {
-		log.Fatalln("invalid value passed into for the --region flag")
+	if cmd.Parsed.Region != "" && !utils.IsRegionValid(cmd.Parsed.Region) {
+		log.Fatalln("invalid value passed in for the --region flag")
 	}
 
 	if cmd.Parsed.RoleArn == "" {

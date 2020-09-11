@@ -31,7 +31,7 @@ var AvailableRegions = [...]string{
 
 // ValidateRegion validates the region passed in as a
 // command line argument
-func ValidateRegion(region string) bool {
+func IsRegionValid(region string) bool {
 	for _, regionOption := range AvailableRegions {
 		if regionOption == region {
 			return true
