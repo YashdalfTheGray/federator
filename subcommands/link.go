@@ -7,6 +7,7 @@ import (
 
 	"github.com/YashdalfTheGray/federator/constants"
 	"github.com/YashdalfTheGray/federator/utils"
+	"github.com/aws/aws-sdk-go-v2/aws"
 )
 
 // LinkSubcommandParsedArgs holds all the bits of data that are
@@ -87,6 +88,16 @@ func (cmd LinkSubcommand) Validate() {
 	if cmd.Parsed.RoleArn == "" {
 		log.Fatalln("the --role-arn flag is required for this subcommand")
 	}
+}
+
+// GetAWSConfig gets the right AWS config based on whether the
+// region is passed in or read from the CLI configuration
+func (cmd LinkSubcommand) GetAWSConfig() aws.Config {
+	if cmd.Parsed.Region == "" {
+		return utils.GetAWSConfig()
+	}
+
+	return utils.GetAWSConfigForRegion(cmd.Parsed.Region)
 }
 
 // Parse will parse the flags, according to the arguments setup in .Setup

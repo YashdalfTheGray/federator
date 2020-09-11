@@ -6,6 +6,7 @@ import (
 	"log"
 
 	"github.com/YashdalfTheGray/federator/utils"
+	"github.com/aws/aws-sdk-go-v2/aws"
 )
 
 // CredsSubcommandParsedArgs holds all the bits of data that are
@@ -74,6 +75,16 @@ func (cmd CredsSubcommand) Validate() {
 	if cmd.Parsed.RoleArn == "" {
 		log.Fatalln("the --role-arn flag is required for this subcommand")
 	}
+}
+
+// GetAWSConfig gets the right AWS config based on whether the
+// region is passed in or read from the CLI configuration
+func (cmd CredsSubcommand) GetAWSConfig() aws.Config {
+	if cmd.Parsed.Region == "" {
+		return utils.GetAWSConfig()
+	}
+
+	return utils.GetAWSConfigForRegion(cmd.Parsed.Region)
 }
 
 // Parse will parse the flags, according to the arguments setup in .Setup
