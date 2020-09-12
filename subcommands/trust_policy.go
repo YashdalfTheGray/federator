@@ -1,6 +1,9 @@
 package subcommands
 
-import "flag"
+import (
+	"flag"
+	"io"
+)
 
 // TrustPolicySubcommandParsedArgs holds all the bits of data that are
 // needed for the trust policy subcommand to work properly.
@@ -50,4 +53,19 @@ func (cmd *TrustPolicySubcommand) Setup() {
 		"",
 		"the external ID that can optionally be provided to be added to the trust policy",
 	)
+}
+
+// Parse will parse the flags, according to the arguments setup in .Setup
+func (cmd TrustPolicySubcommand) Parse(args []string) error {
+	return cmd.subcommand.Parse(args)
+}
+
+// SetOutput is a mirror of flag.FlagSet.SetOutput
+func (cmd TrustPolicySubcommand) SetOutput(output io.Writer) {
+	cmd.subcommand.SetOutput(output)
+}
+
+// PrintDefaults is a mirror of flag.FlagSet.PrintDefaults
+func (cmd TrustPolicySubcommand) PrintDefaults() {
+	cmd.subcommand.PrintDefaults()
 }
