@@ -27,3 +27,27 @@ func NewTrustPolicySubcommand() TrustPolicySubcommand {
 		Parsed: newTrustPolicySubcommandParsedArgs(),
 	}
 }
+
+// Setup will setup the subcommand with flags and descriptions.
+func (cmd *TrustPolicySubcommand) Setup() {
+	cmd.subcommand = flag.NewFlagSet("trust-policy", flag.ExitOnError)
+
+	cmd.subcommand.StringVar(
+		&cmd.Parsed.Arn,
+		"arn",
+		"",
+		"the ARN of an IAM object to add to the trust policy, either this or an account ID must be provided",
+	)
+	cmd.subcommand.StringVar(
+		&cmd.Parsed.AccountID,
+		"account-id",
+		"",
+		"the account ID to add to the trust policy, either this or an arn must be provided",
+	)
+	cmd.subcommand.StringVar(
+		&cmd.Parsed.ExternalID,
+		"external-id",
+		"",
+		"the external ID that can optionally be provided to be added to the trust policy",
+	)
+}
