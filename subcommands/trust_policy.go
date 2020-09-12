@@ -14,3 +14,16 @@ type TrustPolicySubcommand struct {
 	Parsed     TrustPolicySubcommandParsedArgs
 	subcommand *flag.FlagSet
 }
+
+func newTrustPolicySubcommandParsedArgs() TrustPolicySubcommandParsedArgs {
+	return TrustPolicySubcommandParsedArgs{}
+}
+
+// NewTrustPolicySubcommand creates an empty container for all the
+// data that will be set up by calling .Setup and wil be populated by
+// calling .Parse.
+func NewTrustPolicySubcommand() TrustPolicySubcommand {
+	return TrustPolicySubcommand{
+		Parsed: newTrustPolicySubcommandParsedArgs(),
+	}
+}
