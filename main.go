@@ -21,6 +21,9 @@ func main() {
 	credsCmd := subcommands.NewCredsSubcommand()
 	credsCmd.Setup()
 
+	trustPolicyCmd := subcommands.NewTrustPolicySubcommand()
+	trustPolicyCmd.Setup()
+
 	if len(os.Args) < 2 {
 		log.Fatalln("This executable needs a subcommand and options to work. Use -h for help.")
 	}
@@ -89,6 +92,9 @@ func main() {
 		utils.PrintCredsFromSTSResponse(creds, credsCmd.Parsed.OutputJSON)
 		os.Exit(0)
 		break
+	case "trust-policy":
+
+		break
 	case "-h", "--help":
 		fmt.Println(fmt.Sprintf("\nfederator %s", constants.Version))
 		fmt.Println("\nUsage: federator <subcommand> <options>")
@@ -98,6 +104,9 @@ func main() {
 		fmt.Println("\nOptions for the creds subcommand")
 		credsCmd.SetOutput(os.Stdout)
 		credsCmd.PrintDefaults()
+		fmt.Println("\nOptions for the trust-policy subcommand")
+		trustPolicyCmd.SetOutput(os.Stdout)
+		trustPolicyCmd.PrintDefaults()
 		fmt.Println("\nUse `federator -h` or `federator --help` to display this help text.")
 		os.Exit(0)
 		break
