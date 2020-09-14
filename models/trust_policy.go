@@ -1,5 +1,7 @@
 package models
 
+import "encoding/json"
+
 type statementCondition struct {
 	StringEquals struct {
 		ExternalID string `json:"sts:ExternalId"`
@@ -51,4 +53,14 @@ func NewTrustPolicy(resourceToTrust, externalID string) TrustPolicy {
 	}
 
 	return result
+}
+
+// ToJSONString converts the struct with the creds to a JSON object
+func (tp TrustPolicy) ToJSONString() (string, error) {
+	prettyJSON, err := json.MarshalIndent(tp, "", "  ")
+	if err != nil {
+		return "", nil
+	}
+
+	return string(prettyJSON), nil
 }
