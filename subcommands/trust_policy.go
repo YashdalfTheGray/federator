@@ -2,7 +2,10 @@ package subcommands
 
 import (
 	"flag"
+	"fmt"
 	"io"
+
+	"github.com/YashdalfTheGray/federator/models"
 )
 
 // TrustPolicySubcommandParsedArgs holds all the bits of data that are
@@ -68,4 +71,19 @@ func (cmd TrustPolicySubcommand) SetOutput(output io.Writer) {
 // PrintDefaults is a mirror of flag.FlagSet.PrintDefaults
 func (cmd TrustPolicySubcommand) PrintDefaults() {
 	cmd.subcommand.PrintDefaults()
+}
+
+// PrintTrustPolicy prints out a trust policy built from the given parameters
+// in JSON form
+func (cmd TrustPolicySubcommand) PrintTrustPolicy() {
+	var trustPolicy models.TrustPolicy
+
+	if cmd.Parsed.Arn != "" {
+		trustPolicy = models.NewTrustPolicy(cmd.Parsed.Arn, cmd.Parsed.ExternalID)
+
+	} else if cmd.Parsed.AccountID != "" {
+		trustPolicy = models.NewTrustPolicy(cmd.Parsed.AccountID, cmd.Parsed.ExternalID)
+	}
+
+	fmt.Println(trustPolicy.ToJSONString())
 }
