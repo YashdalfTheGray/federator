@@ -63,7 +63,7 @@ func main() {
 			linkCmd.Parsed.DestinationURL,
 		)
 
-		utils.PrintLoginURLDetailsv2(creds, loginURL.String(), linkCmd.Parsed.OutputJSON)
+		utils.PrintLoginURLDetails(creds, loginURL.String(), linkCmd.Parsed.OutputJSON)
 		os.Exit(0)
 		break
 	case "creds":

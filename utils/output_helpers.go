@@ -37,9 +37,9 @@ func PrintCredsFromSTSResponse(out *sts.AssumeRoleResponse, outputJSON bool) {
 	}
 }
 
-// PrintLoginURLDetailsv2 prints out the login URL as well as the expiration date
+// PrintLoginURLDetails prints out the login URL as well as the expiration date
 // of the session
-func PrintLoginURLDetailsv2(out *sts.AssumeRoleResponse, loginURL string, outputJSON bool) {
+func PrintLoginURLDetails(out *sts.AssumeRoleResponse, loginURL string, outputJSON bool) {
 	if os.Getenv("CI_MODE") == "true" {
 		if outputJSON {
 			fmt.Println("<Running in quiet mode because of CI but would print JSON>")
