@@ -85,5 +85,6 @@ func (cmd TrustPolicySubcommand) PrintTrustPolicy() {
 		trustPolicy = models.NewTrustPolicy(cmd.Parsed.AccountID, cmd.Parsed.ExternalID)
 	}
 
-	fmt.Println(trustPolicy.ToJSONString())
+	jsonString, _ := trustPolicy.ToJSONString()
+	fmt.Println(jsonString)
 }

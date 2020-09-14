@@ -2,6 +2,10 @@ package models
 
 import "encoding/json"
 
+// TODO @YashdalfTheGray 2020/09/14
+// 	need to probably change this to a map[string]interface{}
+// 	so that the fields are dynamic rather than set ones
+
 type statementCondition struct {
 	StringEquals struct {
 		ExternalID string `json:"sts:ExternalId"`

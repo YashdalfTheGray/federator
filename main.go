@@ -93,7 +93,9 @@ func main() {
 		os.Exit(0)
 		break
 	case "trust-policy":
-
+		trustPolicyCmd.Parse(os.Args[2:])
+		fmt.Println("The trust policy with the provided details is below:")
+		trustPolicyCmd.PrintTrustPolicy()
 		break
 	case "-h", "--help":
 		fmt.Println(fmt.Sprintf("\nfederator %s", constants.Version))
