@@ -6,10 +6,12 @@ import "encoding/json"
 // 	need to probably change this to a map[string]interface{}
 // 	so that the fields are dynamic rather than set ones
 
+type stringEqualsStruct struct {
+	ExternalID string `json:"sts:ExternalId"`
+}
+
 type statementCondition struct {
-	StringEquals struct {
-		ExternalID string `json:"sts:ExternalId"`
-	}
+	StringEquals stringEqualsStruct
 }
 
 type policyStatement struct {
