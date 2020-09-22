@@ -55,7 +55,13 @@ func NewTrustPolicy(resourceToTrust, externalID string) TrustPolicy {
 	}
 
 	if externalID != "" {
-		result.Statement[0].Condition[0].StringEquals.ExternalID = externalID
+		result.Statement[0].Condition = []statementCondition{
+			{
+				StringEquals: stringEqualsStruct{
+					ExternalID: externalID,
+				},
+			},
+		}
 	}
 
 	return result
