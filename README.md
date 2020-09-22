@@ -24,14 +24,16 @@ federator <subcommand> <options>
 
 The arguments that each subcommand can take are listed below with the subcommands that they are compatible with.
 
-| Parameter       | Subcommand      | Defaults                                    | Description                                                        |
-| --------------- | --------------- | ------------------------------------------- | ------------------------------------------------------------------ |
-| `--role-arn`    | `link`, `creds` | --                                          | The ARN of the role to assume                                      |
-| `--external-id` | `link`, `creds` | "" (empty string)                           | The external ID, if necessary, to be provided                      |
-| `--region`      | `link`, `creds` | from the CLI config                         | The region to make the STS call against                            |
-| `--json`        | `link`, `creds` | `false`                                     | Whether to print out the results in JSON or plain text             |
-| `--issuer`      | `link`          | https://aws.amazon.com                      | The link where the user will be taken when the session has expired |
-| `--destination` | `link`          | https://console.aws.amazon.com/console/home | The link that the user will be redirected to after login           |
+| Parameter       | Subcommand                      | Defaults                                    | Description                                                                                                          |
+| --------------- | ------------------------------- | ------------------------------------------- | -------------------------------------------------------------------------------------------------------------------- |
+| `--role-arn`    | `link`, `creds`                 | --                                          | The ARN of the role to assume                                                                                        |
+| `--arn`         | `trust-policy`                  | --                                          | The IAM resource ARN to trust in the policy, either this or the account ID must be specified for the command to work |
+| `--account-id`  | `trust-policy`                  | --                                          | The AWS account ID to trust in the policy, either this or the resource ARN must be specified for the command to work |
+| `--external-id` | `link`, `creds`, `trust-policy` | "" (empty string)                           | The external ID, if necessary, to be provided, it will be added to the trust policy if provided                      |
+| `--region`      | `link`, `creds`                 | from the CLI config                         | The region to make the STS call against                                                                              |
+| `--json`        | `link`, `creds`                 | `false`                                     | Whether to print out the results in JSON or plain text                                                               |
+| `--issuer`      | `link`                          | https://aws.amazon.com                      | The link where the user will be taken when the session has expired                                                   |
+| `--destination` | `link`                          | https://console.aws.amazon.com/console/home | The link that the user will be redirected to after login                                                             |
 
 ### Examples
 
