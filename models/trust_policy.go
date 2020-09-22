@@ -21,7 +21,7 @@ type policyStatement struct {
 	Principal struct {
 		AWS []string
 	}
-	Condition []statementCondition
+	Condition []statementCondition `json:"Condition,omitempty"`
 }
 
 // TrustPolicy models a trust policy that can be added
