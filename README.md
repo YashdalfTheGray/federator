@@ -51,6 +51,7 @@ The arguments that each subcommand can take are listed below with the subcommand
 | `--arn`         | --                | The IAM resource ARN to trust in the policy, either this or the account ID must be specified for the command to work |
 | `--account-id`  | --                | The AWS account ID to trust in the policy, either this or the resource ARN must be specified for the command to work |
 | `--external-id` | "" (empty string) | The external ID, if necessary, to be provided, it will be added to the trust policy if provided                      |
+| `--json`        | `false`           | Whether to print out the results in JSON or plain text                                                               |
 
 ### Examples
 
