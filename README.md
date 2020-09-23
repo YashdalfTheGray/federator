@@ -68,6 +68,12 @@ federator creds --role-arn arn:aws:iam::000000000000:role/someRole --region us-e
 
 # Change the output to json
 federator link --role-arn arn:aws:iam::000000000000:role/someRole --json
+
+# Output a trust policy for an account ID
+federator trust-policy --account-id 000000000000
+
+# Output a trust policy for an IAM user with an external ID provided
+federator trust-policy --arn arn:aws:iam::000000000000:user/myUser --external-id "some external id"
 ```
 
 ## Development
