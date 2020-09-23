@@ -12,6 +12,7 @@ import (
 // needed for the trust policy subcommand to work properly.
 type TrustPolicySubcommandParsedArgs struct {
 	Arn, AccountID, ExternalID string
+	OutputJSON                 bool
 }
 
 // TrustPolicySubcommand holds the parsed args, when populated,
@@ -56,6 +57,12 @@ func (cmd *TrustPolicySubcommand) Setup() {
 		"",
 		"the external ID that can optionally be provided to be added to the trust policy",
 	)
+	cmd.subcommand.BoolVar(
+		&cmd.Parsed.OutputJSON,
+		"json",
+		false,
+		"output results as JSON rather than plain text",
+	)
 }
 
 // Parse will parse the flags, according to the arguments setup in .Setup
@@ -73,9 +80,9 @@ func (cmd TrustPolicySubcommand) PrintDefaults() {
 	cmd.subcommand.PrintDefaults()
 }
 
-// PrintTrustPolicy prints out a trust policy built from the given parameters
+// TrustPolicyString prints out a trust policy built from the given parameters
 // in JSON form
-func (cmd TrustPolicySubcommand) PrintTrustPolicy() {
+func (cmd TrustPolicySubcommand) TrustPolicyString() {
 	var trustPolicy models.TrustPolicy
 
 	if cmd.Parsed.Arn != "" {

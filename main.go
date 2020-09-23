@@ -94,8 +94,10 @@ func main() {
 		break
 	case "trust-policy":
 		trustPolicyCmd.Parse(os.Args[2:])
-		fmt.Println("The trust policy with the provided details is below:")
-		trustPolicyCmd.PrintTrustPolicy()
+		if !trustPolicyCmd.Parsed.OutputJSON {
+			fmt.Println("The trust policy with the provided details is below:")
+		}
+		trustPolicyCmd.TrustPolicyString()
 		break
 	case "-h", "--help":
 		fmt.Println(fmt.Sprintf("\nfederator %s", constants.Version))
