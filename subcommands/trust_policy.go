@@ -4,6 +4,7 @@ import (
 	"flag"
 	"fmt"
 	"io"
+	"os"
 
 	"github.com/YashdalfTheGray/federator/models"
 )
@@ -83,6 +84,15 @@ func (cmd TrustPolicySubcommand) PrintDefaults() {
 // TrustPolicyString prints out a trust policy built from the given parameters
 // in JSON form
 func (cmd TrustPolicySubcommand) TrustPolicyString() {
+	if os.Getenv("CI_MODE") == "true" {
+		if cmd.Parsed.OutputJSON {
+			fmt.Println("<Running in quiet mode because of CI but would print JSON>")
+		} else {
+			fmt.Println("<Running in quiet mode because of CI>")
+		}
+		return
+	}
+
 	var trustPolicy models.TrustPolicy
 
 	if cmd.Parsed.Arn != "" {
