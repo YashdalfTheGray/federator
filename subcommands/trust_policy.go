@@ -83,14 +83,14 @@ func (cmd TrustPolicySubcommand) PrintDefaults() {
 
 // TrustPolicyString prints out a trust policy built from the given parameters
 // in JSON form
-func (cmd TrustPolicySubcommand) TrustPolicyString() {
+func (cmd TrustPolicySubcommand) TrustPolicyString() string {
 	if os.Getenv("CI_MODE") == "true" {
 		if cmd.Parsed.OutputJSON {
 			fmt.Println("<Running in quiet mode because of CI but would print JSON>")
 		} else {
 			fmt.Println("<Running in quiet mode because of CI>")
 		}
-		return
+		return ""
 	}
 
 	var trustPolicy models.TrustPolicy
@@ -103,5 +103,5 @@ func (cmd TrustPolicySubcommand) TrustPolicyString() {
 	}
 
 	jsonString, _ := trustPolicy.ToJSONString()
-	fmt.Println(jsonString)
+	return jsonString
 }

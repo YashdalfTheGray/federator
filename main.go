@@ -97,7 +97,7 @@ func main() {
 		if !trustPolicyCmd.Parsed.OutputJSON {
 			fmt.Println("The trust policy with the provided details is below:")
 		}
-		trustPolicyCmd.TrustPolicyString()
+		fmt.Println(trustPolicyCmd.TrustPolicyString())
 		break
 	case "-h", "--help":
 		fmt.Println(fmt.Sprintf("\nfederator %s", constants.Version))
