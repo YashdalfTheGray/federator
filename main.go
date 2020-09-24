@@ -98,6 +98,7 @@ func main() {
 			fmt.Println("The trust policy with the provided details is below:")
 		}
 		fmt.Println(trustPolicyCmd.TrustPolicyString())
+		os.Exit(0)
 		break
 	case "-h", "--help":
 		fmt.Println(fmt.Sprintf("\nfederator %s", constants.Version))
