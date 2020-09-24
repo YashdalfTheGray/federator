@@ -40,6 +40,10 @@ jobs:
           ./bin/federator-${{ runner.os }} creds --role-arn ${{ secrets.ASSUME_ROLE_ARN }}
           ./bin/federator-${{ runner.os }} creds --role-arn ${{ secrets.ASSUME_ROLE_ARN }} --region $ANOTHER_AWS_REGION
           ./bin/federator-${{ runner.os }} creds --role-arn ${{ secrets.ASSUME_ROLE_ARN }} --json
+          ./bin/federator-${{ runner.os }} trust-policy --arn arn:aws:iam::000000000000:user/myUser --external-id "test external id"
+          ./bin/federator-${{ runner.os }} trust-policy --arn arn:aws:iam::000000000000:user/myUser --external-id "test external id" --json
+          ./bin/federator-${{ runner.os }} trust-policy --account-id 000000000000 --external-id "test external id"
+          ./bin/federator-${{ runner.os }} trust-policy --account-id 000000000000 --external-id "test external id" --json
           ./bin/federator-${{ runner.os }} --help
           ./bin/federator-${{ runner.os }} --version
         env:
