@@ -21,7 +21,7 @@ type CredsDetails struct {
 
 // NewCredsDetails returns a new CredsDetails object with the
 // right things
-func NewCredsDetails(out *sts.AssumeRoleResponse) *CredsDetails {
+func NewCredsDetails(out *sts.AssumeRoleOutput) *CredsDetails {
 	return &CredsDetails{
 		ExpiresAfter:    out.Credentials.Expiration,
 		AccessKeyID:     *out.Credentials.AccessKeyId,

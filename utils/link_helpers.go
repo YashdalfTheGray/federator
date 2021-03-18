@@ -15,7 +15,7 @@ import (
 
 // GetSessionString returns a JSON.stringified representation of
 // the session object
-func GetSessionString(creds *sts.AssumeRoleResponse) string {
+func GetSessionString(creds *sts.AssumeRoleOutput) string {
 	session := struct {
 		SessionID    string `json:"sessionId"`
 		SessionKey   string `json:"sessionKey"`
@@ -36,7 +36,7 @@ func GetSessionString(creds *sts.AssumeRoleResponse) string {
 
 // GetSigninTokenURL builds a url.URL object using the particulars from the
 // session string and the federation URL
-func GetSigninTokenURL(creds *sts.AssumeRoleResponse) url.URL {
+func GetSigninTokenURL(creds *sts.AssumeRoleOutput) url.URL {
 	u, err := url.Parse(constants.FederationEndpoint)
 	if err != nil {
 		log.Fatalln(err.Error())

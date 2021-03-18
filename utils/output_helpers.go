@@ -13,7 +13,7 @@ import (
 // PrintCredsFromSTSResponse prints out the credentials we got from the
 // STS output in a way that the user can export them in to the shell
 // as well as the expiration information about the session
-func PrintCredsFromSTSResponse(out *sts.AssumeRoleResponse, outputJSON bool) {
+func PrintCredsFromSTSResponse(out *sts.AssumeRoleOutput, outputJSON bool) {
 	if os.Getenv("CI_MODE") == "true" {
 		if outputJSON {
 			fmt.Println("<Running in quiet mode because of CI but would print JSON>")
@@ -39,7 +39,7 @@ func PrintCredsFromSTSResponse(out *sts.AssumeRoleResponse, outputJSON bool) {
 
 // PrintLoginURLDetails prints out the login URL as well as the expiration date
 // of the session
-func PrintLoginURLDetails(out *sts.AssumeRoleResponse, loginURL string, outputJSON bool) {
+func PrintLoginURLDetails(out *sts.AssumeRoleOutput, loginURL string, outputJSON bool) {
 	if os.Getenv("CI_MODE") == "true" {
 		if outputJSON {
 			fmt.Println("<Running in quiet mode because of CI but would print JSON>")
