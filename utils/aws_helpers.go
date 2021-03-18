@@ -9,13 +9,13 @@ import (
 	"regexp"
 
 	"github.com/aws/aws-sdk-go-v2/aws"
-	"github.com/aws/aws-sdk-go-v2/aws/external"
+	"github.com/aws/aws-sdk-go-v2/config"
 	"github.com/aws/aws-sdk-go-v2/service/sts"
 )
 
 // GetAWSConfig pulls the default config from the AWS CLI
 func GetAWSConfig() aws.Config {
-	config, err := external.LoadDefaultAWSConfig()
+	config, err := config.LoadDefaultConfig(context.TODO())
 	if err != nil {
 		panic("error loading default config")
 	}
@@ -26,7 +26,7 @@ func GetAWSConfig() aws.Config {
 // GetAWSConfigForRegion pulls the credentials from the AWS
 // CLI configuration but allows a region override
 func GetAWSConfigForRegion(region string) aws.Config {
-	config, err := external.LoadDefaultAWSConfig()
+	config, err := config.LoadDefaultConfig(context.TODO())
 	if err != nil {
 		panic("error loading default config")
 	}
@@ -52,13 +52,13 @@ func GetSessionName(roleArn string) (string, error) {
 
 // AuthWithSTS uses a role ARN and the session with the default creds
 // to assume a role.
-func AuthWithSTS(roleArn, externalID string, config aws.Config) (*sts.AssumeRoleResponse, error) {
+func AuthWithSTS(roleArn, externalID string, config aws.Config) (*sts.AssumeRoleOutput, error) {
 	roleSessionName, roleSessionNameErr := GetSessionName(roleArn)
 	if roleSessionNameErr != nil {
 		log.Fatalln(roleSessionNameErr.Error())
 	}
 
-	svc := sts.New(config)
+	svc := sts.NewFromConfig(config)
 
 	input := &sts.AssumeRoleInput{
 		RoleArn:         aws.String(roleArn),
@@ -69,5 +69,5 @@ func AuthWithSTS(roleArn, externalID string, config aws.Config) (*sts.AssumeRole
 		input.ExternalId = &externalID
 	}
 
-	return svc.AssumeRoleRequest(input).Send(context.TODO())
+	return svc.AssumeRole(context.TODO(), input)
 }
