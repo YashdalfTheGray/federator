@@ -1,0 +1,46 @@
+name: Build binary
+
+on: [push, pull_request]
+
+jobs:
+  make_build:
+    name: Build
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+        golang: [1.16, 1.17]
+
+      fail-fast: true
+
+    steps:
+      - name: Set up Go 1.16
+        uses: actions/setup-go@v2
+        with:
+          go-version: ${{ matrix.golang }}
+        id: go
+
+      - name: Check out code into the Go module directory
+        uses: actions/checkout@v2
+
+      - name: Get dependencies
+        run: |
+          go get -v -t -d ./...
+
+      - name: Build and test with Make
+        run: |
+          make ci-build platform="${{ runner.os }}"
+          make test
+
+      - name: Store artifacts
+        uses: ncipollo/release-action@v1
+        with:
+          allowUpdates: true
+          artifacts: ${{ format('bin/federator-{0}', runner.os) }}
+          body: ${{ format('Built from {0}', github.sha) }}
+          commit: ${{ github.sha }}
+          draft: true
+          name: Latest CI Build
+          tag: ${{ github.sha }}
+          token: ${{ secrets.GITHUB_TOKEN }}
