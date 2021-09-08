@@ -46,7 +46,7 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Compress artifacts
-        run: tar -cvf ${{ format('bin/federator-{0}-{1].tar', runner.os, matrix.golang) }} ${{ format('bin/federator-{0}', runner.os) }}
+        run: tar -cvf ${{ format('bin/federator-{0}-{1}.tar', runner.os, matrix.golang) }} ${{ format('bin/federator-{0}', runner.os) }}
 
       - name: Upload artifacts for follow up
         uses: actions/upload-artifact@v2
