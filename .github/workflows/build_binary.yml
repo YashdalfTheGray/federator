@@ -33,7 +33,7 @@ jobs:
           make ci-build platform="${{ runner.os }}"
           make test
 
-      - name: Store artifacts
+      - name: Draft a release
         uses: ncipollo/release-action@v1
         with:
           allowUpdates: true
@@ -44,3 +44,9 @@ jobs:
           name: Latest CI Build
           tag: ${{ github.sha }}
           token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Upload artifacts for follow up
+        uses: actions/upload-artifact@v2
+        with:
+          name: ${{ format('federator-{0}', runner.os) }}
+          path: ${{ format('bin/federator-{0}', runner.os) }}
