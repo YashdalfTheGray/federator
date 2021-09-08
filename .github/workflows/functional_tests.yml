@@ -28,6 +28,9 @@ jobs:
           path: bin/
           repo: ${{github.repository}}
 
+      - name: Untar the artifacts
+        run: tar -xvf ${{ format('bin/federator-{0}-{1}.tar', runner.os, matrix.golang) }}
+
       - name: Rename the binary
         run: mv ${{ format('bin/federator-{0}-{1}', runner.os, matrix.golang) }} bin/federator
 

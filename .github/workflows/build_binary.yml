@@ -45,7 +45,7 @@ jobs:
           tag: ${{ github.sha }}
           token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Compress artifacts
+      - name: Tar the artifacts
         run: tar -cvf ${{ format('bin/federator-{0}-{1}.tar', runner.os, matrix.golang) }} ${{ format('bin/federator-{0}', runner.os) }}
 
       - name: Upload artifacts for follow up
