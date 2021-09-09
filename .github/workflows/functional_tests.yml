@@ -19,7 +19,7 @@ jobs:
       fail-fast: true
 
     steps:
-      - name: Download artifact
+      - name: Download artifacts from the build binary workflow
         uses: dawidd6/action-download-artifact@v2
         with:
           workflow: build_binary.yml
@@ -28,11 +28,10 @@ jobs:
           path: bin/
           repo: ${{github.repository}}
 
-      - name: Untar the artifacts
-        run: tar -xvf ${{ format('bin/federator-{0}-{1}.tar', runner.os, matrix.golang) }}
-
-      - name: Rename the binary
-        run: mv ${{ format('bin/federator-{0}', runner.os) }} bin/federator
+      - name: Untar the artifacts and rename binary
+        run: |
+          tar -xvf ${{ format('bin/federator-{0}-{1}.tar', runner.os, matrix.golang) }}
+          mv ${{ format('bin/federator-{0}', runner.os) }} bin/federator
 
       - name: Run "functional tests"
         run: |
@@ -54,3 +53,13 @@ jobs:
           AWS_DEFAULT_REGION: 'us-west-2'
           ANOTHER_AWS_REGION: 'us-east-2'
           CI_MODE: true
+
+      - name: Rename for release
+        run: |
+          mv bin/federator ${{ format('bin/federator-{0}-{1}', runner.os, matrix.golang) }}
+
+      - name: Upload artifacts for the draft release workflow
+        uses: actions/upload-artifact@v2
+        with:
+          name: ${{ format('federator-{0}-{1}', runner.os, matrix.golang) }}
+          path: ${{ format('bin/federator-{0}-{1}.tar', runner.os, matrix.golang) }}
