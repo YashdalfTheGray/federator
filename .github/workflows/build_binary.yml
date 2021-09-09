@@ -33,22 +33,10 @@ jobs:
           make ci-build platform="${{ runner.os }}"
           make test
 
-      - name: Draft a release
-        uses: ncipollo/release-action@v1
-        with:
-          allowUpdates: true
-          artifacts: ${{ format('bin/federator-{0}', runner.os) }}
-          body: ${{ format('Built from {0}', github.sha) }}
-          commit: ${{ github.sha }}
-          draft: true
-          name: Latest CI Build
-          tag: ${{ github.sha }}
-          token: ${{ secrets.GITHUB_TOKEN }}
-
       - name: Tar the artifacts
         run: tar -cvf ${{ format('bin/federator-{0}-{1}.tar', runner.os, matrix.golang) }} ${{ format('bin/federator-{0}', runner.os) }}
 
-      - name: Upload artifacts for follow up
+      - name: Upload artifacts for the functional tests workflow
         uses: actions/upload-artifact@v2
         with:
           name: ${{ format('federator-{0}-{1}', runner.os, matrix.golang) }}
