@@ -1,0 +1,41 @@
+name: Draft release
+
+on:
+  workflow_run:
+    workflows: ['Functional tests']
+    types:
+      - completed
+
+jobs:
+  functional_tests:
+    name: Draft a Github release
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+        golang: [1.16, 1.17]
+
+      fail-fast: true
+
+    steps:
+      - name: Download artifacts from the functional tests workflow
+        uses: dawidd6/action-download-artifact@v2
+        with:
+          workflow: functional_tests.yml
+          workflow_conclusion: success
+          name: ${{ format('federator-{0}-{1}', runner.os, matrix.golang) }}
+          path: bin/
+          repo: ${{github.repository}}
+
+      - name: Draft a release
+        uses: ncipollo/release-action@v1
+        with:
+          allowUpdates: true
+          artifacts: ${{ format('bin/federator-{0}-{1}', runner.os, matrix.golang) }}
+          body: ${{ format('Built from {0}', github.sha) }}
+          commit: ${{ github.sha }}
+          draft: true
+          name: Latest CI Build
+          tag: ${{ github.sha }}
+          token: ${{ secrets.GITHUB_TOKEN }}
