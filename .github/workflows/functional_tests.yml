@@ -62,4 +62,4 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: ${{ format('federator-{0}-{1}', runner.os, matrix.golang) }}
-          path: ${{ format('bin/federator-{0}-{1}.tar', runner.os, matrix.golang) }}
+          path: ${{ format('bin/federator-{0}-{1}', runner.os, matrix.golang) }}
