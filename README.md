@@ -1,4 +1,5 @@
-![Build](https://github.com/YashdalfTheGray/federator/workflows/Build/badge.svg)
+[![Build binary](https://github.com/YashdalfTheGray/federator/actions/workflows/build_binary.yml/badge.svg)](https://github.com/YashdalfTheGray/federator/actions/workflows/build_binary.yml)
+[![Functional tests](https://github.com/YashdalfTheGray/federator/actions/workflows/functional_tests.yml/badge.svg)](https://github.com/YashdalfTheGray/federator/actions/workflows/functional_tests.yml)
 
 # federator
 
