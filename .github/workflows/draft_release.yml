@@ -10,7 +10,7 @@ jobs:
   functional_tests:
     name: Draft a Github release
     runs-on: ${{ matrix.os }}
-    if: ${{ github.actor != 'dependabot[bot]' }}
+    if: ${{ github.actor != 'dependabot[bot]' && github.event.workflow_run.conclusion == 'success' }}
 
     strategy:
       matrix:

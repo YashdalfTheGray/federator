@@ -10,6 +10,7 @@ jobs:
   functional_tests:
     name: Run functional tests
     runs-on: ${{ matrix.os }}
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
 
     strategy:
       matrix:
