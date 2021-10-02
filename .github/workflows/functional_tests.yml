@@ -34,6 +34,9 @@ jobs:
           tar -xvf ${{ format('bin/federator-{0}-{1}.tar', runner.os, matrix.golang) }}
           mv ${{ format('bin/federator-{0}', runner.os) }} bin/federator
 
+      - name: What files are within the tree, Windows?
+        run: Tree bin /F
+
       - name: Run "functional tests"
         run: |
           ./bin/federator link --role-arn ${{ secrets.ASSUME_ROLE_ARN }}
