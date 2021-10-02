@@ -35,6 +35,7 @@ jobs:
           mv ${{ format('bin/federator-{0}', runner.os) }} bin/federator
 
       - name: What files are within the tree, Windows?
+        if: runner.os == 'Windows'
         run: Tree bin /F
 
       - name: Run "functional tests"
