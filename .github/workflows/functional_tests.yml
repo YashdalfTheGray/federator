@@ -33,22 +33,29 @@ jobs:
         run: |
           tar -xvf ${{ format('bin/federator-{0}-{1}.tar', runner.os, matrix.golang) }}
           mv ${{ format('bin/federator-{0}', runner.os) }} bin/federator
-          cd bin
+
+      - name: Figure out binary path (thanks windows)
+        if: runner.os != 'Windows'
+        run: echo "binary_path=\"./bin/federator\"" >> $GITHUB_ENV
+
+      - name: Figure out binary path (thanks windows)
+        if: runner.os == 'Windows'
+        run: echo "binary_path=\".\\bin\\federator\"" >> $GITHUB_ENV
 
       - name: Run "functional tests"
         run: |
-          federator link --role-arn ${{ secrets.ASSUME_ROLE_ARN }}
-          federator link --role-arn ${{ secrets.ASSUME_ROLE_ARN }} --region $ANOTHER_AWS_REGION
-          federator link --role-arn ${{ secrets.ASSUME_ROLE_ARN }} --json
-          federator creds --role-arn ${{ secrets.ASSUME_ROLE_ARN }}
-          federator creds --role-arn ${{ secrets.ASSUME_ROLE_ARN }} --region $ANOTHER_AWS_REGION
-          federator creds --role-arn ${{ secrets.ASSUME_ROLE_ARN }} --json
-          federator trust-policy --arn arn:aws:iam::000000000000:user/myUser --external-id "test external id"
-          federator trust-policy --arn arn:aws:iam::000000000000:user/myUser --external-id "test external id" --json
-          federator trust-policy --account-id 000000000000 --external-id "test external id"
-          federator trust-policy --account-id 000000000000 --external-id "test external id" --json
-          federator --help
-          federator --version
+          ${{ env.binary_path }} link --role-arn ${{ secrets.ASSUME_ROLE_ARN }}
+          ${{ env.binary_path }} link --role-arn ${{ secrets.ASSUME_ROLE_ARN }} --region $ANOTHER_AWS_REGION
+          ${{ env.binary_path }} link --role-arn ${{ secrets.ASSUME_ROLE_ARN }} --json
+          ${{ env.binary_path }} creds --role-arn ${{ secrets.ASSUME_ROLE_ARN }}
+          ${{ env.binary_path }} creds --role-arn ${{ secrets.ASSUME_ROLE_ARN }} --region $ANOTHER_AWS_REGION
+          ${{ env.binary_path }} creds --role-arn ${{ secrets.ASSUME_ROLE_ARN }} --json
+          ${{ env.binary_path }} trust-policy --arn arn:aws:iam::000000000000:user/myUser --external-id "test external id"
+          ${{ env.binary_path }} trust-policy --arn arn:aws:iam::000000000000:user/myUser --external-id "test external id" --json
+          ${{ env.binary_path }} trust-policy --account-id 000000000000 --external-id "test external id"
+          ${{ env.binary_path }} trust-policy --account-id 000000000000 --external-id "test external id" --json
+          ${{ env.binary_path }} --help
+          ${{ env.binary_path }} --version
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
