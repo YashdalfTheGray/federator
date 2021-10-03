@@ -14,7 +14,7 @@ jobs:
 
     strategy:
       matrix:
-        os: [ubuntu-latest, macos-latest, windows-latest]
+        os: [ubuntu-latest, macos-latest]
         golang: [1.16, 1.17]
 
       fail-fast: true
@@ -33,22 +33,21 @@ jobs:
         run: |
           tar -xvf ${{ format('bin/federator-{0}-{1}.tar', runner.os, matrix.golang) }}
           mv ${{ format('bin/federator-{0}', runner.os) }} bin/federator
-          cd bin
 
       - name: Run "functional tests"
         run: |
-          ./federator link --role-arn ${{ secrets.ASSUME_ROLE_ARN }}
-          ./federator link --role-arn ${{ secrets.ASSUME_ROLE_ARN }} --region $ANOTHER_AWS_REGION
-          ./federator link --role-arn ${{ secrets.ASSUME_ROLE_ARN }} --json
-          ./federator creds --role-arn ${{ secrets.ASSUME_ROLE_ARN }}
-          ./federator creds --role-arn ${{ secrets.ASSUME_ROLE_ARN }} --region $ANOTHER_AWS_REGION
-          ./federator creds --role-arn ${{ secrets.ASSUME_ROLE_ARN }} --json
-          ./federator trust-policy --arn arn:aws:iam::000000000000:user/myUser --external-id "test external id"
-          ./federator trust-policy --arn arn:aws:iam::000000000000:user/myUser --external-id "test external id" --json
-          ./federator trust-policy --account-id 000000000000 --external-id "test external id"
-          ./federator trust-policy --account-id 000000000000 --external-id "test external id" --json
-          ./federator --help
-          ./federator --version
+          ./bin/federator link --role-arn ${{ secrets.ASSUME_ROLE_ARN }}
+          ./bin/federator link --role-arn ${{ secrets.ASSUME_ROLE_ARN }} --region $ANOTHER_AWS_REGION
+          ./bin/federator link --role-arn ${{ secrets.ASSUME_ROLE_ARN }} --json
+          ./bin/federator creds --role-arn ${{ secrets.ASSUME_ROLE_ARN }}
+          ./bin/federator creds --role-arn ${{ secrets.ASSUME_ROLE_ARN }} --region $ANOTHER_AWS_REGION
+          ./bin/federator creds --role-arn ${{ secrets.ASSUME_ROLE_ARN }} --json
+          ./bin/federator trust-policy --arn arn:aws:iam::000000000000:user/myUser --external-id "test external id"
+          ./bin/federator trust-policy --arn arn:aws:iam::000000000000:user/myUser --external-id "test external id" --json
+          ./bin/federator trust-policy --account-id 000000000000 --external-id "test external id"
+          ./bin/federator trust-policy --account-id 000000000000 --external-id "test external id" --json
+          ./bin/federator --help
+          ./bin/federator --version
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
