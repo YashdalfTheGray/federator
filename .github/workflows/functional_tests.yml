@@ -37,18 +37,18 @@ jobs:
 
       - name: Run "functional tests"
         run: |
-          federator link --role-arn ${{ secrets.ASSUME_ROLE_ARN }}
-          federator link --role-arn ${{ secrets.ASSUME_ROLE_ARN }} --region $ANOTHER_AWS_REGION
-          federator link --role-arn ${{ secrets.ASSUME_ROLE_ARN }} --json
-          federator creds --role-arn ${{ secrets.ASSUME_ROLE_ARN }}
-          federator creds --role-arn ${{ secrets.ASSUME_ROLE_ARN }} --region $ANOTHER_AWS_REGION
-          federator creds --role-arn ${{ secrets.ASSUME_ROLE_ARN }} --json
-          federator trust-policy --arn arn:aws:iam::000000000000:user/myUser --external-id "test external id"
-          federator trust-policy --arn arn:aws:iam::000000000000:user/myUser --external-id "test external id" --json
-          federator trust-policy --account-id 000000000000 --external-id "test external id"
-          federator trust-policy --account-id 000000000000 --external-id "test external id" --json
-          federator --help
-          federator --version
+          ./federator link --role-arn ${{ secrets.ASSUME_ROLE_ARN }}
+          ./federator link --role-arn ${{ secrets.ASSUME_ROLE_ARN }} --region $ANOTHER_AWS_REGION
+          ./federator link --role-arn ${{ secrets.ASSUME_ROLE_ARN }} --json
+          ./federator creds --role-arn ${{ secrets.ASSUME_ROLE_ARN }}
+          ./federator creds --role-arn ${{ secrets.ASSUME_ROLE_ARN }} --region $ANOTHER_AWS_REGION
+          ./federator creds --role-arn ${{ secrets.ASSUME_ROLE_ARN }} --json
+          ./federator trust-policy --arn arn:aws:iam::000000000000:user/myUser --external-id "test external id"
+          ./federator trust-policy --arn arn:aws:iam::000000000000:user/myUser --external-id "test external id" --json
+          ./federator trust-policy --account-id 000000000000 --external-id "test external id"
+          ./federator trust-policy --account-id 000000000000 --external-id "test external id" --json
+          ./federator --help
+          ./federator --version
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
