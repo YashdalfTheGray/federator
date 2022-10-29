@@ -15,25 +15,24 @@ import (
 
 // GetAWSConfig pulls the default config from the AWS CLI
 func GetAWSConfig() aws.Config {
-	config, err := config.LoadDefaultConfig(context.TODO())
-	if err != nil {
-		panic("error loading default config")
-	}
-
-	return config
+	return GetAWSConfigOpts()
 }
 
 // GetAWSConfigForRegion pulls the credentials from the AWS
 // CLI configuration but allows a region override
 func GetAWSConfigForRegion(region string) aws.Config {
-	config, err := config.LoadDefaultConfig(context.TODO())
+	return GetAWSConfigOpts(config.WithRegion(region))
+}
+
+func GetAWSConfigOpts(opts ...func(*config.LoadOptions) error) aws.Config {
+	cfg, err := config.LoadDefaultConfig(
+		context.TODO(),
+		opts...,
+	)
 	if err != nil {
 		panic("error loading default config")
 	}
-
-	config.Region = region
-
-	return config
+	return cfg
 }
 
 // GetSessionName returns a session name appropriate for use as the
