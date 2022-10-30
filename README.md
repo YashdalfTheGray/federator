@@ -38,12 +38,14 @@ The arguments that each subcommand can take are listed below with the subcommand
 
 #### Flags for the `creds` subcommand
 
-| Parameter       | Defaults            | Description                                                                                     |
-| --------------- | ------------------- | ----------------------------------------------------------------------------------------------- |
-| `--role-arn`    | --                  | The ARN of the role to assume                                                                   |
-| `--external-id` | "" (empty string)   | The external ID, if necessary, to be provided, it will be added to the trust policy if provided |
-| `--region`      | from the CLI config | The region to make the STS call against                                                         |
-| `--json`        | `false`             | Whether to print out the results in JSON or plain text                                          |
+| Parameter       | Defaults            | Description                                                                                             |
+| --------------- | ------------------- |---------------------------------------------------------------------------------------------------------|
+| `--role-arn`    | --                  | The ARN of the role to assume                                                                           |
+| `--external-id` | "" (empty string)   | The external ID, if necessary, to be provided, it will be added to the trust policy if provided         |
+| `--region`      | from the CLI config | The region to make the STS call against                                                                 |
+| `--profile`     | "" (empty string)   | The AWS shared credentials file profile name to use when assuming the role                              |
+| `--json`        | `false`             | Whether to print out the results in JSON or plain text                                                  |
+| `--awscli`      | `false`             | Whether to print out the results in AWSCLI formatted json or plain text. Takes precedence over `--json` |
 
 #### Flags for the `trust-policy` subcommand
 
@@ -68,6 +70,9 @@ federator link --role-arn arn:aws:iam::000000000000:role/someRole --external-id 
 # Use a regional STS endpoint different from the one configured with the CLI
 federator creds --role-arn arn:aws:iam::000000000000:role/someRole --region us-east-1
 
+# Use the 'assumer' profile to make the assume role call
+federator creds --role-arn arn:aws:iam::000000000000:role/someRole --region us-east-1 --profile assumer
+
 # Change the output to json
 federator link --role-arn arn:aws:iam::000000000000:role/someRole --json
 
@@ -76,6 +81,12 @@ federator trust-policy --account-id 000000000000
 
 # Output a trust policy for an IAM user with an external ID provided
 federator trust-policy --arn arn:aws:iam::000000000000:user/myUser --external-id "some external id"
+```
+
+```
+# in ~/.aws/credentials
+[assumer]
+credential_process = /path/to/bin/federator creds --role-arn arn:aws:iam::000000000000:role/someRole --region us-east-1 --awscli
 ```
 
 ## Development

@@ -14,7 +14,7 @@ import (
 // needed for the link subcommand to work properly.
 type CredsSubcommandParsedArgs struct {
 	RoleArn, ExternalID, Region, Profile string
-	OutputJSON                           bool
+	OutputJSON, OutputAwsCli             bool
 }
 
 // CredsSubcommand holds the parsed args, when populated as well as internal
@@ -70,6 +70,12 @@ func (cmd *CredsSubcommand) Setup() {
 		"json",
 		false,
 		"output results as JSON rather than plain text",
+	)
+	cmd.subcommand.BoolVar(
+		&cmd.Parsed.OutputAwsCli,
+		"awscli",
+		false,
+		"output results in JSON format suitable for use with credentials_process",
 	)
 }
 
