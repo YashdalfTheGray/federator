@@ -13,18 +13,30 @@ import (
 // PrintCredsFromSTSResponse prints out the credentials we got from the
 // STS output in a way that the user can export them in to the shell
 // as well as the expiration information about the session
-func PrintCredsFromSTSResponse(out *sts.AssumeRoleOutput, outputJSON bool) {
+func PrintCredsFromSTSResponse(out *sts.AssumeRoleOutput, outputJSON bool, outputAwsCli bool) {
 	if os.Getenv("CI_MODE") == "true" {
-		if outputJSON {
+		switch {
+		case outputAwsCli:
+			fmt.Println("<Running in quiet mode because of CI but would print AWSCLI format")
+		case outputJSON:
 			fmt.Println("<Running in quiet mode because of CI but would print JSON>")
-		} else {
+		default:
 			fmt.Println("<Running in quiet mode because of CI>")
 		}
 		return
 	}
 
-	credsDetails := models.NewCredsDetails(out)
+	if outputAwsCli {
+		creds := models.NewAwsCliCreds(out)
+		jsonOutput, err := creds.ToJSONString()
+		if err != nil {
+			log.Fatalln(err.Error())
+		}
+		fmt.Println(jsonOutput)
+		return
+	}
 
+	credsDetails := models.NewCredsDetails(out)
 	if outputJSON {
 		jsonOutput, err := credsDetails.ToJSONString()
 		if err != nil {

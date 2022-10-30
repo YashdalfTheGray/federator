@@ -72,7 +72,7 @@ func main() {
 
 		config = credsCmd.GetAWSConfig()
 
-		if !credsCmd.Parsed.OutputJSON {
+		if !credsCmd.Parsed.OutputJSON && !credsCmd.Parsed.OutputAwsCli {
 			fmt.Printf(
 				"Using AWS STS in region %s to get temporary credentials...\n",
 				config.Region,
@@ -89,7 +89,7 @@ func main() {
 			log.Fatalln(credsErr.Error())
 		}
 
-		utils.PrintCredsFromSTSResponse(creds, credsCmd.Parsed.OutputJSON)
+		utils.PrintCredsFromSTSResponse(creds, credsCmd.Parsed.OutputJSON, credsCmd.Parsed.OutputAwsCli)
 		os.Exit(0)
 		break
 	case "trust-policy":
