@@ -1,5 +1,6 @@
 [![Build binary](https://github.com/YashdalfTheGray/federator/actions/workflows/build_binary.yml/badge.svg)](https://github.com/YashdalfTheGray/federator/actions/workflows/build_binary.yml)
 [![Functional tests](https://github.com/YashdalfTheGray/federator/actions/workflows/functional_tests.yml/badge.svg)](https://github.com/YashdalfTheGray/federator/actions/workflows/functional_tests.yml)
+[![Go Report Card](https://goreportcard.com/badge/github.com/YashdalfTheGray/federator)](https://goreportcard.com/report/github.com/YashdalfTheGray/federator)
 
 # federator
 
@@ -9,13 +10,13 @@ A utility to federate into an AWS account using AWS Security Token Service and t
 
 ### Installation
 
-The easiest way to install this tool is to grab the built binary from the releases, put it somewhere that is in your path, run a quick `chmod +x <path_to_federator>` and you'll be good to go.
+The easiest way to install this tool is to grab the built binary from the releases, put it somewhere that is in your path, run a quick `chmod +x <path_to_federator>` and you'll be good to go. For Windows, you'll need to put the binary in a place that is either already included in your path or you will need to include a new entry in your path variable.
 
-The other way to get this tool is to pull down the repository and run `make`. This will put a file called `federator` in the `bin` folder in the root of the project directory. Since we use the AWS SDK v2 for Go, we are required to use Go 1.13 or higher. Additionally, since this package uses Go modules, it also requires Go 1.13.
+The other way to get this tool is to pull down the repository and run `make`. This will put a file called `federator` in the `bin` folder in the root of the project directory. Any reasonably new version of go can be used to build this package.
 
 ## Running
 
-The federator tool has two modes, `link` and `creds`. These take the form of subcommands. The `link` subcommand gives you a link to sign into the AWS Console and the `creds` subcommand just gives you temporary credentials with the right commands to import it into a shell instance. There is also a JSON output mode so that it can be machine readable or piped into something like [`jq`](https://stedolan.github.io/jq/).
+The federator tool has three modes, `link`, `creds`, and `trust-policy`. These take the form of subcommands. The `link` subcommand gives you a link to sign into the AWS Console and the `creds` subcommand just gives you temporary credentials with the right commands to import it into a shell instance. There is also a JSON output mode so that it can be machine readable or piped into something like [`jq`](https://stedolan.github.io/jq/).
 
 ```shell
 federator <subcommand> <options>
@@ -39,7 +40,7 @@ The arguments that each subcommand can take are listed below with the subcommand
 #### Flags for the `creds` subcommand
 
 | Parameter       | Defaults            | Description                                                                                             |
-| --------------- | ------------------- |---------------------------------------------------------------------------------------------------------|
+| --------------- | ------------------- | ------------------------------------------------------------------------------------------------------- |
 | `--role-arn`    | --                  | The ARN of the role to assume                                                                           |
 | `--external-id` | "" (empty string)   | The external ID, if necessary, to be provided, it will be added to the trust policy if provided         |
 | `--region`      | from the CLI config | The region to make the STS call against                                                                 |
