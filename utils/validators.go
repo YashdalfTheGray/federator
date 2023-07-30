@@ -1,6 +1,7 @@
 package utils
 
 // AvailableRegions is an array of regions that are supported
+// This needs to change to use https://docs.aws.amazon.com/sdk-for-go/api/aws/endpoints/#pkg-constants
 var AvailableRegions = [...]string{
 	"af-south-1",
 	"ap-northeast-1",
