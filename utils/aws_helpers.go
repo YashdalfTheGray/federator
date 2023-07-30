@@ -43,7 +43,7 @@ func GetSessionName(roleArn string) (string, error) {
 	match := roleRegex.FindAllStringSubmatch(roleArn, -1)
 
 	if !roleRegex.MatchString(roleArn) {
-		return "", errors.New("Invalid Role ARN")
+		return "", errors.New("invalid Role ARN")
 	}
 
 	return fmt.Sprintf("federator-%s-%s", user, match[0][1]), nil

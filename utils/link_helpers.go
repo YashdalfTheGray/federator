@@ -2,7 +2,7 @@ package utils
 
 import (
 	"encoding/json"
-	"io/ioutil"
+	"io"
 	"log"
 	"net/http"
 	"net/url"
@@ -67,7 +67,7 @@ func GetSigninToken(signinURL url.URL) (string, error) {
 	}
 	defer resp.Body.Close()
 
-	body, readBodyErr := ioutil.ReadAll(resp.Body)
+	body, readBodyErr := io.ReadAll(resp.Body)
 	if readBodyErr != nil {
 		return "", readBodyErr
 	}
