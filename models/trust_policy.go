@@ -36,10 +36,11 @@ type TrustPolicy struct {
 // IAM user or role ARN.
 //
 // Examples of valid resources are
-//  "123456789012"
-//  "arn:aws:iam::123456789012:root"
-//  "arn:aws:iam::AWS-account-ID:user/user-name"
-//  "arn:aws:iam::AWS-account-ID:role/role-name"
+//
+//	"123456789012"
+//	"arn:aws:iam::123456789012:root"
+//	"arn:aws:iam::AWS-account-ID:user/user-name"
+//	"arn:aws:iam::AWS-account-ID:role/role-name"
 func NewTrustPolicy(resourceToTrust, externalID string) TrustPolicy {
 	result := TrustPolicy{
 		Version: "2012-10-17",

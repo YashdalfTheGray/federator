@@ -65,7 +65,6 @@ func main() {
 
 		helpers.PrintLoginURLDetails(creds, loginURL.String(), linkCmd.Parsed.OutputJSON)
 		os.Exit(0)
-		break
 	case "creds":
 		credsCmd.Parse(os.Args[2:])
 		credsCmd.Validate()
@@ -91,7 +90,6 @@ func main() {
 
 		helpers.PrintCredsFromSTSResponse(creds, credsCmd.Parsed.OutputJSON, credsCmd.Parsed.OutputAwsCli)
 		os.Exit(0)
-		break
 	case "trust-policy":
 		trustPolicyCmd.Parse(os.Args[2:])
 		if !trustPolicyCmd.Parsed.OutputJSON {
@@ -99,9 +97,8 @@ func main() {
 		}
 		fmt.Println(trustPolicyCmd.TrustPolicyString())
 		os.Exit(0)
-		break
 	case "-h", "--help":
-		fmt.Println(fmt.Sprintf("\nfederator %s", constants.Version))
+		fmt.Printf("\nfederator %s\n", constants.Version)
 		fmt.Println("\nUsage: federator <subcommand> <options>")
 		fmt.Println("Options for the link subcommand")
 		linkCmd.SetOutput(os.Stdout)
@@ -114,10 +111,9 @@ func main() {
 		trustPolicyCmd.PrintDefaults()
 		fmt.Println("\nUse `federator -h` or `federator --help` to display this help text.")
 		os.Exit(0)
-		break
 	case "-v", "--version":
-		fmt.Println(fmt.Sprintf("v%s", constants.Version))
+		fmt.Printf("v%s\n", constants.Version)
 	default:
-		log.Fatalln(fmt.Sprintf("Invalid subcommand, %s. Valid options are link, creds", os.Args[1]))
+		log.Fatalf("Invalid subcommand, %s. Valid options are link, creds\n", os.Args[1])
 	}
 }
