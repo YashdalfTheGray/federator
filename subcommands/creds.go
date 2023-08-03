@@ -5,7 +5,7 @@ import (
 	"io"
 	"log"
 
-	"github.com/YashdalfTheGray/federator/utils"
+	"github.com/YashdalfTheGray/federator/helpers"
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/config"
 )
@@ -81,7 +81,7 @@ func (cmd *CredsSubcommand) Setup() {
 
 // Validate runs some general validations on the arguments
 func (cmd CredsSubcommand) Validate() {
-	if cmd.Parsed.Region != "" && !utils.IsRegionValid(cmd.Parsed.Region) {
+	if cmd.Parsed.Region != "" && !helpers.IsRegionValid(cmd.Parsed.Region) {
 		log.Fatalln("invalid value passed in for the --region flag")
 	}
 
@@ -100,7 +100,7 @@ func (cmd CredsSubcommand) GetAWSConfig() aws.Config {
 	if cmd.Parsed.Profile != "" {
 		opts = append(opts, config.WithSharedConfigProfile(cmd.Parsed.Profile))
 	}
-	return utils.GetAWSConfigOpts(opts...)
+	return helpers.GetAWSConfigOpts(opts...)
 }
 
 // Parse will parse the flags, according to the arguments setup in .Setup

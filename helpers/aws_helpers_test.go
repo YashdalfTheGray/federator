@@ -1,10 +1,10 @@
-package utils_test
+package helpers_test
 
 import (
 	"fmt"
 	"testing"
 
-	"github.com/YashdalfTheGray/federator/utils"
+	"github.com/YashdalfTheGray/federator/helpers"
 )
 
 func TestGetAWSSessionName(t *testing.T) {
@@ -15,7 +15,7 @@ func TestGetAWSSessionName(t *testing.T) {
 		{
 			desc:               "returns a role session name given valid role arn",
 			inRoleArn:          "arn:aws:iam::123456789012:role/testRole",
-			outRoleSessionName: fmt.Sprintf("federator-%s-testRole", utils.GetCurrentUsername()),
+			outRoleSessionName: fmt.Sprintf("federator-%s-testRole", helpers.GetCurrentUsername()),
 			expectError:        false,
 		},
 		{
@@ -27,7 +27,7 @@ func TestGetAWSSessionName(t *testing.T) {
 	}
 	for _, tC := range testCases {
 		t.Run(tC.desc, func(t *testing.T) {
-			roleSessionName, err := utils.GetSessionName(tC.inRoleArn)
+			roleSessionName, err := helpers.GetSessionName(tC.inRoleArn)
 
 			if tC.expectError && err == nil {
 				t.Error("Expected error not to be nil")

@@ -1,4 +1,4 @@
-package utils
+package helpers
 
 // AvailableRegions is an array of regions that are supported
 // This needs to change to use https://docs.aws.amazon.com/sdk-for-go/api/aws/endpoints/#pkg-constants

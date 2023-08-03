@@ -8,8 +8,8 @@ import (
 	"github.com/aws/aws-sdk-go-v2/aws"
 
 	"github.com/YashdalfTheGray/federator/constants"
+	"github.com/YashdalfTheGray/federator/helpers"
 	"github.com/YashdalfTheGray/federator/subcommands"
-	"github.com/YashdalfTheGray/federator/utils"
 )
 
 func main() {
@@ -43,7 +43,7 @@ func main() {
 			fmt.Print("\n")
 		}
 
-		creds, credsErr := utils.AuthWithSTS(
+		creds, credsErr := helpers.AuthWithSTS(
 			linkCmd.Parsed.RoleArn,
 			linkCmd.Parsed.ExternalID,
 			config,
@@ -52,18 +52,18 @@ func main() {
 			log.Fatalln(credsErr.Error())
 		}
 
-		signinTokenURL := utils.GetSigninTokenURL(creds)
-		signinToken, signinErr := utils.GetSigninToken(signinTokenURL)
+		signinTokenURL := helpers.GetSigninTokenURL(creds)
+		signinToken, signinErr := helpers.GetSigninToken(signinTokenURL)
 		if signinErr != nil {
 			log.Fatalln(signinErr.Error())
 		}
-		loginURL := utils.GetLoginURL(
+		loginURL := helpers.GetLoginURL(
 			signinToken,
 			linkCmd.Parsed.IssuerURL,
 			linkCmd.Parsed.DestinationURL,
 		)
 
-		utils.PrintLoginURLDetails(creds, loginURL.String(), linkCmd.Parsed.OutputJSON)
+		helpers.PrintLoginURLDetails(creds, loginURL.String(), linkCmd.Parsed.OutputJSON)
 		os.Exit(0)
 		break
 	case "creds":
@@ -80,7 +80,7 @@ func main() {
 			fmt.Print("\n")
 		}
 
-		creds, credsErr := utils.AuthWithSTS(
+		creds, credsErr := helpers.AuthWithSTS(
 			credsCmd.Parsed.RoleArn,
 			credsCmd.Parsed.ExternalID,
 			config,
@@ -89,7 +89,7 @@ func main() {
 			log.Fatalln(credsErr.Error())
 		}
 
-		utils.PrintCredsFromSTSResponse(creds, credsCmd.Parsed.OutputJSON, credsCmd.Parsed.OutputAwsCli)
+		helpers.PrintCredsFromSTSResponse(creds, credsCmd.Parsed.OutputJSON, credsCmd.Parsed.OutputAwsCli)
 		os.Exit(0)
 		break
 	case "trust-policy":

@@ -1,9 +1,9 @@
-package utils_test
+package helpers_test
 
 import (
 	"testing"
 
-	"github.com/YashdalfTheGray/federator/utils"
+	"github.com/YashdalfTheGray/federator/helpers"
 )
 
 func TestValidateRegions(t *testing.T) {
@@ -24,7 +24,7 @@ func TestValidateRegions(t *testing.T) {
 	}
 	for _, tC := range testCases {
 		t.Run(tC.desc, func(t *testing.T) {
-			if result := utils.IsRegionValid(tC.input); result != tC.expected {
+			if result := helpers.IsRegionValid(tC.input); result != tC.expected {
 				t.Errorf("Expected the result to be %t but wasn't for input %s", tC.expected, tC.input)
 			}
 		})
