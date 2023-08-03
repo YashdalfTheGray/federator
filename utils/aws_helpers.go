@@ -5,7 +5,6 @@ import (
 	"errors"
 	"fmt"
 	"log"
-	"os"
 	"regexp"
 
 	"github.com/aws/aws-sdk-go-v2/aws"
@@ -38,7 +37,7 @@ func GetAWSConfigOpts(opts ...func(*config.LoadOptions) error) aws.Config {
 // GetSessionName returns a session name appropriate for use as the
 // AssumeRole role session name parameter
 func GetSessionName(roleArn string) (string, error) {
-	user, _ := os.LookupEnv("USER")
+	user := GetCurrentUsername()
 	roleRegex := regexp.MustCompile("arn:aws:iam::[0-9]{12}:role/([a-zA-Z0-9-]+)")
 	match := roleRegex.FindAllStringSubmatch(roleArn, -1)
 

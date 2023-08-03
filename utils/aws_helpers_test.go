@@ -2,7 +2,6 @@ package utils_test
 
 import (
 	"fmt"
-	"os"
 	"testing"
 
 	"github.com/YashdalfTheGray/federator/utils"
@@ -16,7 +15,7 @@ func TestGetAWSSessionName(t *testing.T) {
 		{
 			desc:               "returns a role session name given valid role arn",
 			inRoleArn:          "arn:aws:iam::123456789012:role/testRole",
-			outRoleSessionName: fmt.Sprintf("federator-%s-testRole", os.Getenv("USER")),
+			outRoleSessionName: fmt.Sprintf("federator-%s-testRole", utils.GetCurrentUsername()),
 			expectError:        false,
 		},
 		{
