@@ -16,6 +16,7 @@ jobs:
       matrix:
         os: [ubuntu-latest, macos-latest, windows-latest]
         golang: ['1.19.x', '1.20.x']
+        arch: ['amd64', 'arm64']
 
       fail-fast: true
 
@@ -25,7 +26,7 @@ jobs:
         with:
           workflow: functional_tests.yml
           workflow_conclusion: success
-          name: ${{ format('federator-{0}-{1}', runner.os, matrix.golang) }}
+          name: ${{ format('federator-{0}-{1}-{2}', runner.os, runner.arch, matrix.golang) }}
           path: bin/
           repo: ${{github.repository}}
 
@@ -33,7 +34,7 @@ jobs:
         uses: ncipollo/release-action@v1
         with:
           allowUpdates: true
-          artifacts: ${{ format('bin/federator-{0}-{1}', runner.os, matrix.golang) }}
+          artifacts: ${{ format('bin/federator-{0}-{1}-{2}', runner.os, runner.arch, matrix.golang) }}
           body: ${{ format('Built from {0}', github.sha) }}
           commit: ${{ github.sha }}
           draft: true
