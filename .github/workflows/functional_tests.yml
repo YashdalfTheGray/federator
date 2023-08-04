@@ -6,6 +6,10 @@ on:
     types:
       - completed
 
+# This is fixed for now since Github Actions don't have an arm64 runner
+env:
+  ARCH: amd64
+
 jobs:
   functional_tests:
     name: Run functional tests
@@ -25,14 +29,14 @@ jobs:
         with:
           workflow: build_binary.yml
           workflow_conclusion: success
-          name: ${{ format('federator-{0}-{1}', runner.os, matrix.golang) }}
+          name: ${{ format('federator-{0}-{1}-{2}', runner.os, env.ARCH, matrix.golang) }}
           path: bin/
           repo: ${{github.repository}}
 
       - name: Untar the artifacts and rename binary
         run: |
-          tar -xvf ${{ format('bin/federator-{0}-{1}.tar', runner.os, matrix.golang) }}
-          mv ${{ format('bin/federator-{0}', runner.os) }} bin/federator
+          tar -xvf ${{ format('bin/federator-{0}-{1}-{2}.tar', runner.os, env.ARCH, matrix.golang) }}
+          mv ${{ format('bin/federator-{0}-{1}', runner.os, env.ARCH) }} bin/federator
 
       - name: Run "functional tests"
         run: |
