@@ -8,7 +8,7 @@ build: .bin-stamp
 	go build -o bin/federator
 
 ci-build: .bin-stamp
-	go build -ldflags="-s -w" -o bin/federator-$(platform)
+	go build -ldflags="-s -w" -o bin/federator-$(platform)-$(arch)
 
 test:
 	go test -covermode=atomic -coverpkg=all ./...
