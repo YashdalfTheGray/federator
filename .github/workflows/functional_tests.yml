@@ -6,10 +6,6 @@ on:
     types:
       - completed
 
-# This is fixed for now since Github Actions don't have an arm64 runner
-env:
-  ARCH: amd64
-
 jobs:
   functional_tests:
     name: Run functional tests
@@ -20,6 +16,7 @@ jobs:
       matrix:
         os: [ubuntu-latest, macos-latest, windows-latest]
         golang: ['1.19.x', '1.20.x']
+        arch: ['amd64', 'arm64']
 
       fail-fast: true
 
@@ -29,16 +26,17 @@ jobs:
         with:
           workflow: build_binary.yml
           workflow_conclusion: success
-          name: ${{ format('federator-{0}-{1}-{2}', runner.os, env.ARCH, matrix.golang) }}
+          name: ${{ format('federator-{0}-{1}-{2}', runner.os, matrix.arch, matrix.golang) }}
           path: bin/
           repo: ${{github.repository}}
 
       - name: Untar the artifacts and rename binary
         run: |
-          tar -xvf ${{ format('bin/federator-{0}-{1}-{2}.tar', runner.os, env.ARCH, matrix.golang) }}
-          mv ${{ format('bin/federator-{0}-{1}', runner.os, env.ARCH) }} bin/federator
+          tar -xvf ${{ format('bin/federator-{0}-{1}-{2}.tar', runner.os, matrix.arch, matrix.golang) }}
+          mv ${{ format('bin/federator-{0}-{1}', runner.os, matrix.arch) }} bin/federator
 
       - name: Run "functional tests"
+        if: ${{ matrix.arch == 'amd64' }}
         run: |
           ./bin/federator link --role-arn ${{ secrets.ASSUME_ROLE_ARN }}
           ./bin/federator link --role-arn ${{ secrets.ASSUME_ROLE_ARN }} --region $ANOTHER_AWS_REGION
