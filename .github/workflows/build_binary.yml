@@ -31,11 +31,11 @@ jobs:
 
       - name: Build and test with Make
         run: |
-          make ci-build platform="${{ runner.os }}" arch="${{ runner.arch }}"
+          make ci-build platform="${{ runner.os }}" arch="${{ matrix.arch }}"
           make test
 
       - name: Tar the artifacts
-        run: tar -cvf ${{ format('bin/federator-{0}-{1}-{2}.tar', runner.os, runner.arch, matrix.golang) }} ${{ format('bin/federator-{0}-{1}', runner.os, runner.arch) }}
+        run: tar -cvf ${{ format('bin/federator-{0}-{1}-{2}.tar', runner.os, matrix.arch, matrix.golang) }} ${{ format('bin/federator-{0}-{1}', runner.os, matrix.arch) }}
 
       - name: Upload artifacts for the functional tests workflow
         uses: actions/upload-artifact@v3
