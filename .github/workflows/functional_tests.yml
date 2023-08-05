@@ -65,5 +65,5 @@ jobs:
       - name: Upload artifacts for the draft release workflow
         uses: actions/upload-artifact@v3
         with:
-          name: ${{ format('federator-{0}-{1}', runner.os, matrix.golang) }}
-          path: ${{ format('bin/federator-{0}-{1}', runner.os, matrix.golang) }}
+          name: ${{ format('federator-{0}-{1}-{2}', runner.os, matrix.arch, matrix.golang) }}
+          path: ${{ format('bin/federator-{0}-{1}-{2}', runner.os, matrix.arch, matrix.golang) }}
