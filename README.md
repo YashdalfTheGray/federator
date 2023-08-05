@@ -84,7 +84,10 @@ federator trust-policy --account-id 000000000000
 federator trust-policy --arn arn:aws:iam::000000000000:user/myUser --external-id "some external id"
 ```
 
-```
+```sh
+# Example command for use as credential_process
+federator creds --role-arn arn:aws:iam::000000000000:role/someRole --region us-east-1 -awscli
+
 # in ~/.aws/credentials
 [assumer]
 credential_process = /path/to/bin/federator creds --role-arn arn:aws:iam::000000000000:role/someRole --region us-east-1 --awscli
