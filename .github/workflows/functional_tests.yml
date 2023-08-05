@@ -60,7 +60,7 @@ jobs:
 
       - name: Rename for release
         run: |
-          mv bin/federator ${{ format('bin/federator-{0}-{1}', runner.os, matrix.golang) }}
+          mv bin/federator ${{ format('bin/federator-{0}-{1}-{2}', runner.os, matrix.arch, matrix.golang) }}
 
       - name: Upload artifacts for the draft release workflow
         uses: actions/upload-artifact@v3
