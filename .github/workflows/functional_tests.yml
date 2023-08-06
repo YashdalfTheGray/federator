@@ -6,6 +6,9 @@ on:
     types:
       - completed
 
+env:
+  GOLANG_VERSION: '1.20.x'
+
 jobs:
   functional_tests:
     name: Run functional tests
@@ -15,7 +18,6 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest, macos-latest, windows-latest]
-        golang: ['1.19.x', '1.20.x']
         arch: ['amd64', 'arm64']
 
       fail-fast: true
@@ -26,13 +28,13 @@ jobs:
         with:
           workflow: build_binary.yml
           workflow_conclusion: success
-          name: ${{ format('federator-{0}-{1}-{2}', runner.os, matrix.arch, matrix.golang) }}
+          name: ${{ format('federator-{0}-{1}', runner.os, matrix.arch) }}
           path: bin/
           repo: ${{github.repository}}
 
       - name: Untar the artifacts and rename binary
         run: |
-          tar -xvf ${{ format('bin/federator-{0}-{1}-{2}.tar', runner.os, matrix.arch, matrix.golang) }}
+          tar -xvf ${{ format('bin/federator-{0}-{1}.tar', runner.os, matrix.arch) }}
           mv ${{ format('bin/federator-{0}-{1}', runner.os, matrix.arch) }} bin/federator
 
       - name: Run "functional tests"
@@ -60,10 +62,10 @@ jobs:
 
       - name: Rename for release
         run: |
-          mv bin/federator ${{ format('bin/federator-{0}-{1}-{2}', runner.os, matrix.arch, matrix.golang) }}
+          mv bin/federator ${{ format('bin/federator-{0}-{1}', runner.os, matrix.arch) }}
 
       - name: Upload artifacts for the draft release workflow
         uses: actions/upload-artifact@v3
         with:
-          name: ${{ format('federator-{0}-{1}-{2}', runner.os, matrix.arch, matrix.golang) }}
-          path: ${{ format('bin/federator-{0}-{1}-{2}', runner.os, matrix.arch, matrix.golang) }}
+          name: ${{ format('federator-{0}-{1}', runner.os, matrix.arch) }}
+          path: ${{ format('bin/federator-{0}-{1}', runner.os, matrix.arch) }}
