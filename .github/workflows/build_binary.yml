@@ -20,6 +20,9 @@ jobs:
         uses: actions/setup-go@v4
         with:
           go-version: ${{ matrix.golang }}
+          cache: true
+          cache-dependency-path: go.sum
+
         id: go
 
       - name: Check out code into the Go module directory
