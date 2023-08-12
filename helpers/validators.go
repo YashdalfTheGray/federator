@@ -1,7 +1,6 @@
 package helpers
 
 // AvailableRegions is an array of regions that are supported
-// This needs to change to use https://docs.aws.amazon.com/sdk-for-go/api/aws/endpoints/#pkg-constants
 var AvailableRegions = [...]string{
 	"af-south-1",
 	"ap-northeast-1",
@@ -30,7 +29,7 @@ var AvailableRegions = [...]string{
 	"us-east-1",
 }
 
-// ValidateRegion validates the region passed in as a
+// IsRegionValid validates the region passed in as a
 // command line argument
 func IsRegionValid(region string) bool {
 	for _, regionOption := range AvailableRegions {
