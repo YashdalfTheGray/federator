@@ -2,7 +2,7 @@ package constants
 
 // These are some constants for the application
 const (
-	Version               = "2.3.0"
+	Version               = "2.3.1"
 	EnvAWSAccessKeyID     = "AWS_ACCESS_KEY_ID"
 	EnvAWSSecretAccessKey = "AWS_SECRET_ACCESS_KEY"
 	EnvAWSSessionToken    = "AWS_SESSION_TOKEN"
