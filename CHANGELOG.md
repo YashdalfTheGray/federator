@@ -5,6 +5,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [v2.3.1](https://github.com/YashdalfTheGray/federator/tree/v2.3.1) (2023-11-05)
+
+### Modified
+
+- Updated dependencies
+
 ## [v2.3.0](https://github.com/YashdalfTheGray/federator/tree/v2.3.0) (2023-07-29)
 
 ### Added
