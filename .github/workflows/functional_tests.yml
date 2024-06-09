@@ -24,7 +24,7 @@ jobs:
 
     steps:
       - name: Download artifacts from the build binary workflow
-        uses: dawidd6/action-download-artifact@v3
+        uses: dawidd6/action-download-artifact@v5
         with:
           workflow: build_binary.yml
           workflow_conclusion: success
