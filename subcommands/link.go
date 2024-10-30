@@ -8,13 +8,14 @@ import (
 	"github.com/YashdalfTheGray/federator/constants"
 	"github.com/YashdalfTheGray/federator/helpers"
 	"github.com/aws/aws-sdk-go-v2/aws"
+	"github.com/aws/aws-sdk-go-v2/config"
 )
 
 // LinkSubcommandParsedArgs holds all the bits of data that are
 // needed for the link subcommand to work properly.
 type LinkSubcommandParsedArgs struct {
-	RoleArn, ExternalID, Region, IssuerURL, DestinationURL string
-	OutputJSON                                             bool
+	RoleArn, ExternalID, Region, IssuerURL, DestinationURL, Profile string
+	OutputJSON                                                      bool
 }
 
 // LinkSubcommand holds the parsed args, when populated as well as internal
@@ -71,6 +72,12 @@ func (cmd *LinkSubcommand) Setup() {
 		constants.DefaultDestination,
 		"the link that the user will be redirected to after login",
 	)
+	cmd.subcommand.StringVar(
+		&cmd.Parsed.Profile,
+		"profile",
+		"",
+		"the aws credentials profile to use when making the assume role call",
+	)
 	cmd.subcommand.BoolVar(
 		&cmd.Parsed.OutputJSON,
 		"json",
@@ -93,11 +100,16 @@ func (cmd LinkSubcommand) Validate() {
 // GetAWSConfig gets the right AWS config based on whether the
 // region is passed in or read from the CLI configuration
 func (cmd LinkSubcommand) GetAWSConfig() aws.Config {
-	if cmd.Parsed.Region == "" {
-		return helpers.GetAWSConfig()
+	opts := []func(*config.LoadOptions) error{}
+
+	if cmd.Parsed.Region != "" {
+		opts = append(opts, config.WithRegion(cmd.Parsed.Region))
+	}
+	if cmd.Parsed.Profile != "" {
+		opts = append(opts, config.WithSharedConfigProfile(cmd.Parsed.Profile))
 	}
 
-	return helpers.GetAWSConfigForRegion(cmd.Parsed.Region)
+	return helpers.GetAWSConfigOpts(opts...)
 }
 
 // Parse will parse the flags, according to the arguments setup in .Setup

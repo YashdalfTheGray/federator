@@ -7,7 +7,7 @@ on:
       - completed
 
 env:
-  GOLANG_VERSION: '1.20.x'
+  GOLANG_VERSION: '1.23'
 
 jobs:
   functional_tests:

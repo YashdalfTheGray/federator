@@ -1,6 +1,8 @@
 module github.com/YashdalfTheGray/federator
 
-go 1.20
+go 1.21
+
+toolchain go1.23.2
 
 require (
 	github.com/aws/aws-sdk-go-v2 v1.30.4
