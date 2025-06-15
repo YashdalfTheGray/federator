@@ -24,7 +24,7 @@ jobs:
 
     steps:
       - name: Download artifacts from the functional tests workflow
-        uses: dawidd6/action-download-artifact@v10
+        uses: dawidd6/action-download-artifact@v11
         with:
           workflow: functional_tests.yml
           workflow_conclusion: success
